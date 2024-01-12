@@ -1,0 +1,13 @@
+name: WalletSdk
+options:
+  bundleIdPrefix: com.spruceid.wallet.sdk
+settings:
+  ENABLE_USER_SCRIPT_SANDBOXING: YES
+targets:
+  WalletSdk:
+    type: library.dynamic
+    platform: iOS
+    deploymentTarget: "12.0"
+    sources:
+      - Sources
+      - Tests
