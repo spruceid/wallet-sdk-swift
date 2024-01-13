@@ -7,21 +7,54 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0CFAF957E9AB545BAD7C44DA /* lib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129BF0341A0665545DF0795A /* lib.swift */; };
+		2C06E7E6AB0E465FAB654FB1 /* lib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129BF0341A0665545DF0795A /* lib.swift */; };
+		35889FC05C11A0241FF8BDC7 /* WalletSdk.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EF2900EA1212D2F1B2E0EF8B /* WalletSdk.dylib */; };
+		7007205465E5DD3CCADFCD12 /* WalletSdkRs in Frameworks */ = {isa = PBXBuildFile; productRef = 56B96E6756085DBE44F60DC9 /* WalletSdkRs */; };
 		FE48CBBF23FFF9673ABF12C1 /* lib.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91B416A27FC24DAA4F1815D /* lib.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B4A0C46E62E32D4B616BF9DE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B579D527116F0162D9E0E14F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 67866670B92EB5D2FD821ACB;
+			remoteInfo = WalletSdk;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		129BF0341A0665545DF0795A /* lib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lib.swift; sourceTree = "<group>"; };
+		CABB533F184B3B0023971131 /* WalletSdkTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WalletSdkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF2900EA1212D2F1B2E0EF8B /* WalletSdk.dylib */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.dylib"; path = WalletSdk.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91B416A27FC24DAA4F1815D /* lib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lib.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2F1024189DE743F8A116304B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				35889FC05C11A0241FF8BDC7 /* WalletSdk.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		412629A2D99AA0940DC6FBD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7007205465E5DD3CCADFCD12 /* WalletSdkRs in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		10272F62401778BDE785D5F9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				EF2900EA1212D2F1B2E0EF8B /* WalletSdk.dylib */,
+				CABB533F184B3B0023971131 /* WalletSdkTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -75,15 +108,36 @@
 			buildConfigurationList = EBB821B1C7D4EE17BD744CE2 /* Build configuration list for PBXNativeTarget "WalletSdk" */;
 			buildPhases = (
 				C7519379A186B6321D7E07B5 /* Sources */,
+				412629A2D99AA0940DC6FBD3 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = WalletSdk;
+			packageProductDependencies = (
+				56B96E6756085DBE44F60DC9 /* WalletSdkRs */,
+			);
 			productName = WalletSdk;
 			productReference = EF2900EA1212D2F1B2E0EF8B /* WalletSdk.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
+		};
+		A0E32A649B7A4CF1EA59D349 /* WalletSdkTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CF243028346FDF747B5C7865 /* Build configuration list for PBXNativeTarget "WalletSdkTests" */;
+			buildPhases = (
+				0C48CF484FD037130C6E8AD1 /* Sources */,
+				2F1024189DE743F8A116304B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8614BEC933B3504F300B8A37 /* PBXTargetDependency */,
+			);
+			name = WalletSdkTests;
+			productName = WalletSdkTests;
+			productReference = CABB533F184B3B0023971131 /* WalletSdkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -105,31 +159,65 @@
 				en,
 			);
 			mainGroup = 4098AC3577FBB87D2353A9E8;
+			packageReferences = (
+				61D6239B8C5FC3DBAABC3291 /* XCRemoteSwiftPackageReference "wallet-sdk-rs" */,
+			);
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				67866670B92EB5D2FD821ACB /* WalletSdk */,
+				A0E32A649B7A4CF1EA59D349 /* WalletSdkTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0C48CF484FD037130C6E8AD1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C06E7E6AB0E465FAB654FB1 /* lib.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C7519379A186B6321D7E07B5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				FE48CBBF23FFF9673ABF12C1 /* lib.swift in Sources */,
-				0CFAF957E9AB545BAD7C44DA /* lib.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		8614BEC933B3504F300B8A37 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 67866670B92EB5D2FD821ACB /* WalletSdk */;
+			targetProxy = B4A0C46E62E32D4B616BF9DE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		0957CCDD901CED57D757C93D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.spruceid.wallet.sdk.WalletSdkTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		B1EAC11796129C9AB6B6895B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -186,6 +274,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -195,6 +284,21 @@
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
+		};
+		C0810DCCDC1BDF46ACD38725 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.spruceid.wallet.sdk.WalletSdkTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 		D5B8EC6A0A58911B5E8D38A2 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -248,6 +352,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -262,7 +367,7 @@
 		FC760691AA2BE4D0C494EF29 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -285,6 +390,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		CF243028346FDF747B5C7865 /* Build configuration list for PBXNativeTarget "WalletSdkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0810DCCDC1BDF46ACD38725 /* Debug */,
+				0957CCDD901CED57D757C93D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		EBB821B1C7D4EE17BD744CE2 /* Build configuration list for PBXNativeTarget "WalletSdk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -295,6 +409,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		61D6239B8C5FC3DBAABC3291 /* XCRemoteSwiftPackageReference "wallet-sdk-rs" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/spruceid/wallet-sdk-rs";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		56B96E6756085DBE44F60DC9 /* WalletSdkRs */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 61D6239B8C5FC3DBAABC3291 /* XCRemoteSwiftPackageReference "wallet-sdk-rs" */;
+			productName = WalletSdkRs;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B579D527116F0162D9E0E14F /* Project object */;
 }
