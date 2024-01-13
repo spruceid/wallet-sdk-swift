@@ -1,3 +1,5 @@
-public func hello() -> String {
-    return "Hello, world."
+import WalletSdkRs
+
+public func helloRust() -> String {
+    return helloFfi()
 }

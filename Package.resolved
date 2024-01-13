@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "wallet-sdk-rs",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/spruceid/wallet-sdk-rs.git",
+      "state" : {
+        "revision" : "1647a9fcccdf44698f932f8ca3c7f452182f91f1",
+        "version" : "0.0.2"
+      }
+    }
+  ],
+  "version" : 2
+}

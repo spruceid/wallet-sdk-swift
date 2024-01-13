@@ -1,8 +1,8 @@
 import XCTest
-import WalletSdk
+@testable import WalletSdk
 
 class HelloTests: XCTestCase {
-    func testHello() {
-        XCTAssertEqual(hello(), "Hello, world.")
+    func testHelloRust() {
+        XCTAssertEqual(helloRust(), "Hello from Rust!")
     }
 }

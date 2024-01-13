@@ -1,13 +1,29 @@
 name: WalletSdk
 options:
   bundleIdPrefix: com.spruceid.wallet.sdk
+packages:
+  WalletSdkRs:
+    url: https://github.com/spruceid/wallet-sdk-rs
+    from: 0.0.2
 settings:
   ENABLE_USER_SCRIPT_SANDBOXING: YES
+  GENERATE_INFOPLIST_FILE: YES
 targets:
   WalletSdk:
     type: library.dynamic
     platform: iOS
-    deploymentTarget: "12.0"
+    deploymentTarget: "13.0"
     sources:
       - Sources
+    dependencies:
+      - package: WalletSdkRs
+    scheme:
+      testTargets:
+        - WalletSdkTests
+  WalletSdkTests:
+    platform: iOS
+    type: bundle.unit-test
+    sources:
       - Tests
+    dependencies:
+      - target: WalletSdk
