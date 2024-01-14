@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "WalletSdk",
+    platforms: [
+        .iOS(.v13)
+    ],
     products: [
         .library(
             name: "WalletSdk",
@@ -16,7 +19,11 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "WalletSdk"),
+            name: "WalletSdk",
+            dependencies: [
+                .product(name: "WalletSdkRs", package: "wallet-sdk-rs")
+            ]
+        ),
         .testTarget(
             name: "WalletSdkTests",
             dependencies: ["WalletSdk"]),

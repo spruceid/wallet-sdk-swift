@@ -2,6 +2,7 @@
 /.build
 /Packages
 xcuserdata/
+Derived/
 DerivedData/
 .swiftpm/configuration/registries.json
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
