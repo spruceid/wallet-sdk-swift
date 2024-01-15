@@ -3,8 +3,12 @@ options:
   bundleIdPrefix: com.spruceid.wallet.sdk
 packages:
   WalletSdkRs:
-    url: https://github.com/spruceid/wallet-sdk-rs
-    from: 0.0.2
+    # url: https://github.com/spruceid/wallet-sdk-rs
+    # from: 0.0.2
+    path: "../wallet-sdk-rs"
+  SwiftLint:
+    url: https://github.com/realm/SwiftLint
+    from: 0.54.0
 settings:
   ENABLE_USER_SCRIPT_SANDBOXING: YES
   GENERATE_INFOPLIST_FILE: YES
@@ -20,6 +24,13 @@ targets:
     scheme:
       testTargets:
         - WalletSdkTests
+    info:
+      path: Info.plist
+      properties:
+        NSBluetoothAlwaysUsageDescription: "Secure transmission of mobile DL data"
+    buildToolPlugins:
+      - plugin: SwiftLintPlugin
+        package: SwiftLint
   WalletSdkTests:
     platform: iOS
     type: bundle.unit-test
