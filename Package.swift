@@ -11,11 +11,11 @@ let package = Package(
     products: [
         .library(
             name: "WalletSdk",
-            targets: ["WalletSdk"]),
+            targets: ["WalletSdk"])
     ],
     dependencies: [
-        .package(url: "https://github.com/spruceid/wallet-sdk-rs.git", from: "0.0.2"),
-        // .package(path: "../wallet-sdk-rs")
+        // .package(url: "https://github.com/spruceid/wallet-sdk-rs.git", from: "0.0.2"),
+        .package(path: "../wallet-sdk-rs")
     ],
     targets: [
         .target(
@@ -26,6 +26,6 @@ let package = Package(
         ),
         .testTarget(
             name: "WalletSdkTests",
-            dependencies: ["WalletSdk"]),
+            dependencies: ["WalletSdk"])
     ]
 )

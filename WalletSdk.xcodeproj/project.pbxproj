@@ -3,13 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		2C06E7E6AB0E465FAB654FB1 /* lib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129BF0341A0665545DF0795A /* lib.swift */; };
 		35889FC05C11A0241FF8BDC7 /* WalletSdk.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EF2900EA1212D2F1B2E0EF8B /* WalletSdk.dylib */; };
 		7007205465E5DD3CCADFCD12 /* WalletSdkRs in Frameworks */ = {isa = PBXBuildFile; productRef = 56B96E6756085DBE44F60DC9 /* WalletSdkRs */; };
+		8C163FF96A39891F2A8F5AEC /* MDocHolderBLECentral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E406724E610073B67D1612AD /* MDocHolderBLECentral.swift */; };
+		C73C1F5A2B55AADC009843DB /* MDocBLEUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73C1F592B55AADC009843DB /* MDocBLEUtils.swift */; };
 		FE48CBBF23FFF9673ABF12C1 /* lib.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91B416A27FC24DAA4F1815D /* lib.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,7 +27,10 @@
 
 /* Begin PBXFileReference section */
 		129BF0341A0665545DF0795A /* lib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lib.swift; sourceTree = "<group>"; };
+		B69047AE0EBBC7E2883AB9B8 /* wallet-sdk-rs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "wallet-sdk-rs"; path = "../wallet-sdk-rs"; sourceTree = SOURCE_ROOT; };
+		C73C1F592B55AADC009843DB /* MDocBLEUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDocBLEUtils.swift; sourceTree = "<group>"; };
 		CABB533F184B3B0023971131 /* WalletSdkTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WalletSdkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E406724E610073B67D1612AD /* MDocHolderBLECentral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDocHolderBLECentral.swift; sourceTree = "<group>"; };
 		EF2900EA1212D2F1B2E0EF8B /* WalletSdk.dylib */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.dylib"; path = WalletSdk.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		F91B416A27FC24DAA4F1815D /* lib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lib.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,11 +75,20 @@
 		4098AC3577FBB87D2353A9E8 = {
 			isa = PBXGroup;
 			children = (
+				9D7D1150EFF2AA15323784AE /* Packages */,
 				3E20ED595CE261F377740D1B /* Sources */,
 				C3AADC3233006822474F95B5 /* Tests */,
 				10272F62401778BDE785D5F9 /* Products */,
 			);
 			sourceTree = "<group>";
+		};
+		9D7D1150EFF2AA15323784AE /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				B69047AE0EBBC7E2883AB9B8 /* wallet-sdk-rs */,
+			);
+			name = Packages;
+			sourceTree = SOURCE_ROOT;
 		};
 		AB798F3EA3FBA4D3F65EAD2B /* WalletSdkTests */ = {
 			isa = PBXGroup;
@@ -88,6 +102,8 @@
 			isa = PBXGroup;
 			children = (
 				F91B416A27FC24DAA4F1815D /* lib.swift */,
+				E406724E610073B67D1612AD /* MDocHolderBLECentral.swift */,
+				C73C1F592B55AADC009843DB /* MDocBLEUtils.swift */,
 			);
 			path = WalletSdk;
 			sourceTree = "<group>";
@@ -113,6 +129,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				B767A695191040043C361AF8 /* PBXTargetDependency */,
 			);
 			name = WalletSdk;
 			packageProductDependencies = (
@@ -147,8 +164,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = AD9657B50B09096BBF940BAB /* Build configuration list for PBXProject "WalletSdk" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -160,7 +175,7 @@
 			);
 			mainGroup = 4098AC3577FBB87D2353A9E8;
 			packageReferences = (
-				61D6239B8C5FC3DBAABC3291 /* XCRemoteSwiftPackageReference "wallet-sdk-rs" */,
+				F303F355E570BA5DAC107356 /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -184,7 +199,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C163FF96A39891F2A8F5AEC /* MDocHolderBLECentral.swift in Sources */,
 				FE48CBBF23FFF9673ABF12C1 /* lib.swift in Sources */,
+				C73C1F5A2B55AADC009843DB /* MDocBLEUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,6 +212,10 @@
 			isa = PBXTargetDependency;
 			target = 67866670B92EB5D2FD821ACB /* WalletSdk */;
 			targetProxy = B4A0C46E62E32D4B616BF9DE /* PBXContainerItemProxy */;
+		};
+		B767A695191040043C361AF8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = CF3E0E19C0BE8E103E00445D /* SwiftLintPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -217,6 +238,7 @@
 		B1EAC11796129C9AB6B6895B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -367,6 +389,7 @@
 		FC760691AA2BE4D0C494EF29 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -411,12 +434,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		61D6239B8C5FC3DBAABC3291 /* XCRemoteSwiftPackageReference "wallet-sdk-rs" */ = {
+		F303F355E570BA5DAC107356 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/spruceid/wallet-sdk-rs";
+			repositoryURL = "https://github.com/realm/SwiftLint";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.2;
+				minimumVersion = 0.54.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -424,8 +447,12 @@
 /* Begin XCSwiftPackageProductDependency section */
 		56B96E6756085DBE44F60DC9 /* WalletSdkRs */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 61D6239B8C5FC3DBAABC3291 /* XCRemoteSwiftPackageReference "wallet-sdk-rs" */;
 			productName = WalletSdkRs;
+		};
+		CF3E0E19C0BE8E103E00445D /* SwiftLintPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F303F355E570BA5DAC107356 /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintPlugin";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
