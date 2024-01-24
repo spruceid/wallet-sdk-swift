@@ -15,13 +15,15 @@ let package = Package(
     ],
     dependencies: [
         // .package(url: "https://github.com/spruceid/wallet-sdk-rs.git", from: "0.0.2"),
-        .package(path: "../wallet-sdk-rs")
+        .package(path: "../wallet-sdk-rs"),
+        .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.0")
     ],
     targets: [
         .target(
             name: "WalletSdk",
             dependencies: [
-                .product(name: "WalletSdkRs", package: "wallet-sdk-rs")
+                .product(name: "WalletSdkRs", package: "wallet-sdk-rs"),
+                .product(name: "Algorithms", package: "swift-algorithms")
             ]
         ),
         .testTarget(

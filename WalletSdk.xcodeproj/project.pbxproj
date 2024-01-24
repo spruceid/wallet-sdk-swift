@@ -3,16 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1AFB24CAEE23E164BB632A4F /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1126AB45A26D3CA5CD78C40A /* Credentials.swift */; };
 		2C06E7E6AB0E465FAB654FB1 /* lib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129BF0341A0665545DF0795A /* lib.swift */; };
+		2D3EEF02E7954B38D2A99B71 /* Credential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7175FB84F120DB1BF92CE275 /* Credential.swift */; };
 		35889FC05C11A0241FF8BDC7 /* WalletSdk.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EF2900EA1212D2F1B2E0EF8B /* WalletSdk.dylib */; };
+		52415D827C7278EF2485D35A /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 7E7A705330BE8374C0C118B9 /* Algorithms */; };
 		7007205465E5DD3CCADFCD12 /* WalletSdkRs in Frameworks */ = {isa = PBXBuildFile; productRef = 56B96E6756085DBE44F60DC9 /* WalletSdkRs */; };
+		885D2E4CD84A87E43176B34C /* MDocBLEUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6967B7411A2BF0323D917A15 /* MDocBLEUtils.swift */; };
 		8C163FF96A39891F2A8F5AEC /* MDocHolderBLECentral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E406724E610073B67D1612AD /* MDocHolderBLECentral.swift */; };
-		C73C1F5A2B55AADC009843DB /* MDocBLEUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73C1F592B55AADC009843DB /* MDocBLEUtils.swift */; };
-		FE48CBBF23FFF9673ABF12C1 /* lib.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91B416A27FC24DAA4F1815D /* lib.swift */; };
+		B7105205775242A30C151935 /* MDoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C2B3E8CB767874FAE28855 /* MDoc.swift */; };
+		D9842EE90D65EEA7E71D6DC9 /* CryptoUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC211BC9D494F0ECDEFC9ACD /* CryptoUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,13 +30,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1126AB45A26D3CA5CD78C40A /* Credentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credentials.swift; sourceTree = "<group>"; };
 		129BF0341A0665545DF0795A /* lib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lib.swift; sourceTree = "<group>"; };
+		6967B7411A2BF0323D917A15 /* MDocBLEUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDocBLEUtils.swift; sourceTree = "<group>"; };
+		7175FB84F120DB1BF92CE275 /* Credential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credential.swift; sourceTree = "<group>"; };
 		B69047AE0EBBC7E2883AB9B8 /* wallet-sdk-rs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "wallet-sdk-rs"; path = "../wallet-sdk-rs"; sourceTree = SOURCE_ROOT; };
-		C73C1F592B55AADC009843DB /* MDocBLEUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDocBLEUtils.swift; sourceTree = "<group>"; };
+		B8C2B3E8CB767874FAE28855 /* MDoc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDoc.swift; sourceTree = "<group>"; };
 		CABB533F184B3B0023971131 /* WalletSdkTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WalletSdkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E406724E610073B67D1612AD /* MDocHolderBLECentral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDocHolderBLECentral.swift; sourceTree = "<group>"; };
+		EC211BC9D494F0ECDEFC9ACD /* CryptoUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoUtils.swift; sourceTree = "<group>"; };
 		EF2900EA1212D2F1B2E0EF8B /* WalletSdk.dylib */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.dylib"; path = WalletSdk.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		F91B416A27FC24DAA4F1815D /* lib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lib.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +56,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7007205465E5DD3CCADFCD12 /* WalletSdkRs in Frameworks */,
+				52415D827C7278EF2485D35A /* Algorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,9 +109,12 @@
 		BCE7F525963B9A15EDA32F1D /* WalletSdk */ = {
 			isa = PBXGroup;
 			children = (
-				F91B416A27FC24DAA4F1815D /* lib.swift */,
+				7175FB84F120DB1BF92CE275 /* Credential.swift */,
+				1126AB45A26D3CA5CD78C40A /* Credentials.swift */,
+				EC211BC9D494F0ECDEFC9ACD /* CryptoUtils.swift */,
+				B8C2B3E8CB767874FAE28855 /* MDoc.swift */,
+				6967B7411A2BF0323D917A15 /* MDocBLEUtils.swift */,
 				E406724E610073B67D1612AD /* MDocHolderBLECentral.swift */,
-				C73C1F592B55AADC009843DB /* MDocBLEUtils.swift */,
 			);
 			path = WalletSdk;
 			sourceTree = "<group>";
@@ -134,6 +145,7 @@
 			name = WalletSdk;
 			packageProductDependencies = (
 				56B96E6756085DBE44F60DC9 /* WalletSdkRs */,
+				7E7A705330BE8374C0C118B9 /* Algorithms */,
 			);
 			productName = WalletSdk;
 			productReference = EF2900EA1212D2F1B2E0EF8B /* WalletSdk.dylib */;
@@ -164,6 +176,8 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
 			};
 			buildConfigurationList = AD9657B50B09096BBF940BAB /* Build configuration list for PBXProject "WalletSdk" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -175,6 +189,7 @@
 			);
 			mainGroup = 4098AC3577FBB87D2353A9E8;
 			packageReferences = (
+				3013618FC4C1D265CDCDB70F /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				F303F355E570BA5DAC107356 /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
 			projectDirPath = "";
@@ -199,9 +214,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D3EEF02E7954B38D2A99B71 /* Credential.swift in Sources */,
+				1AFB24CAEE23E164BB632A4F /* Credentials.swift in Sources */,
+				D9842EE90D65EEA7E71D6DC9 /* CryptoUtils.swift in Sources */,
+				B7105205775242A30C151935 /* MDoc.swift in Sources */,
+				885D2E4CD84A87E43176B34C /* MDocBLEUtils.swift in Sources */,
 				8C163FF96A39891F2A8F5AEC /* MDocHolderBLECentral.swift in Sources */,
-				FE48CBBF23FFF9673ABF12C1 /* lib.swift in Sources */,
-				C73C1F5A2B55AADC009843DB /* MDocBLEUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,6 +452,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3013618FC4C1D265CDCDB70F /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
 		F303F355E570BA5DAC107356 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/SwiftLint";
@@ -448,6 +474,11 @@
 		56B96E6756085DBE44F60DC9 /* WalletSdkRs */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WalletSdkRs;
+		};
+		7E7A705330BE8374C0C118B9 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3013618FC4C1D265CDCDB70F /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
 		};
 		CF3E0E19C0BE8E103E00445D /* SwiftLintPlugin */ = {
 			isa = XCSwiftPackageProductDependency;

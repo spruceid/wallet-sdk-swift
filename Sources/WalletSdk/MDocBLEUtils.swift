@@ -12,8 +12,11 @@ let readerIdentCharacteristicId = CBUUID(string: "00000008-A123-48CE-896B-4C7697
 let readerL2CAPCharacteristicId = CBUUID(string: "0000000B-A123-48CE-896B-4C76973373E6")
 
 enum MDocBLECallback {
+    case done
+    case connected
     case message(Data)
     case error(String)
+    case progress(String)
 }
 
 protocol MDocBLEDelegate: AnyObject {
