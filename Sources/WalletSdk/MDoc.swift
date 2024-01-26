@@ -37,7 +37,6 @@ public protocol BLESessionStateDelegate: AnyObject {
 }
 
 public class BLESessionManager {
-//    var inner: rustLayer::SessionManager;
     var callback: BLESessionStateDelegate
     var uuid: UUID
     var state: String
@@ -61,10 +60,8 @@ public class BLESessionManager {
         }
     }
 
-    // Cancel the request mid-transaction and gracefully clean up the BLE
-    // stack.
+    // Cancel the request mid-transaction and gracefully clean up the BLE stack.
     public func cancel() {
-        // TODO use terminateSession
         bleManager.disconnectFromDevice()
     }
 
@@ -75,8 +72,6 @@ public class BLESessionManager {
                                                               permittedItems: items)
             let query = [kSecClass: kSecClassKey,
           kSecAttrApplicationLabel: self.mdoc.keyAlias,
-                         //                             kSecAttrKeyType: kSecAttrKeyTypeECSECPrimeRandom,
-                         //                             kSecUseDataProtectionKeychain: true,
                      kSecReturnRef: true] as [String: Any]
 
             // Find and cast the result as a SecKey instance.
@@ -113,10 +108,6 @@ public class BLESessionManager {
             self.cancel()
         }
     }
-
-    // TODO a set of callback methods to handle: i) timeouts, ii) bluetooth events
-    // (on both iOS and Android the ble libraries seem to rely on callbacks and will
-    // handle the async/background aspects themselves)
 }
 
 extension BLESessionManager: MDocBLEDelegate {

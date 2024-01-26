@@ -1,7 +1,8 @@
+import Algorithms
 import CoreBluetooth
 import Foundation
 import os
-import Algorithms
+import WalletSdkRs
 
 enum CharacteristicsError: Error {
     case missingMandatoryCharacteristic(name: String)
@@ -43,7 +44,14 @@ class MDocHolderBLECentral: NSObject {
     }
 
     func disconnectFromDevice () {
-        peripheral?.writeValue(_: Data([0x02]),
+        let message: Data
+        do {
+            message = try terminateSession()
+        } catch {
+            print("\(error)")
+            message = Data([0x02])
+        }
+        peripheral?.writeValue(_: message,
                                for: stateCharacteristic!,
                                type: CBCharacteristicWriteType.withoutResponse)
         disconnect()
