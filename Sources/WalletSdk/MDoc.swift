@@ -5,7 +5,7 @@ import WalletSdkRs
 
 public typealias Namespace = String
 public typealias IssuerSignedItemBytes = Data
- public typealias ItemsRequest = WalletSdkRs.ItemsRequest
+public typealias ItemsRequest = WalletSdkRs.ItemsRequest
 
 public class MDoc: Credential {
     var inner: WalletSdkRs.MDoc
