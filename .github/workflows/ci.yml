@@ -11,10 +11,11 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: swift-actions/setup-swift@v1
 
     - name: Test
       uses: mxcl/xcodebuild@v2
+      with:
+        swift: ^5.9
 
     - name: Lint
       run: swiftlint
