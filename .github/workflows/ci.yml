@@ -1,0 +1,22 @@
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  swift:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: Homebrew/actions/setup-homebrew@master
+    - run: brew install xcodegen
+
+    - name: Generate XCode project
+      run: xcodegen
+
+    - name: Test
+      uses: mxcl/xcodebuild@v2
