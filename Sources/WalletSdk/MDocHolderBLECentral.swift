@@ -1,5 +1,8 @@
+import Algorithms
 import CoreBluetooth
 import Foundation
+import os
+import WalletSdkRs
 
 enum CharacteristicsError: Error {
     case missingMandatoryCharacteristic(name: String)
@@ -20,6 +23,12 @@ class MDocHolderBLECentral: NSObject {
     var callback: MDocBLEDelegate
     var peripheral: CBPeripheral?
     var writeCharacteristic: CBCharacteristic?
+    var readCharacteristic: CBCharacteristic?
+    var stateCharacteristic: CBCharacteristic?
+    var maximumCharacteristicSize: Int?
+    var writingQueueTotalChunks = 0
+    var writingQueueChunkIndex = 0
+    var writingQueue: IndexingIterator<ChunksOfCountCollection<Data>>?
 
     var incomingMessageBuffer = Data()
 
@@ -35,11 +44,56 @@ class MDocHolderBLECentral: NSObject {
     }
 
     func disconnectFromDevice () {
-        centralManager.cancelPeripheralConnection(peripheral!)
+        let message: Data
+        do {
+            message = try terminateSession()
+        } catch {
+            print("\(error)")
+            message = Data([0x02])
+        }
+        peripheral?.writeValue(_: message,
+                               for: stateCharacteristic!,
+                               type: CBCharacteristicWriteType.withoutResponse)
+        disconnect()
+    }
+
+    private func disconnect() {
+        if let peripheral = self.peripheral {
+            centralManager.cancelPeripheralConnection(peripheral)
+        }
     }
 
     func writeOutgoingValue(data: Data) {
-        peripheral?.writeValue(_: data, for: writeCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
+        let chunks = data.chunks(ofCount: maximumCharacteristicSize! - 1)
+        writingQueueTotalChunks = chunks.count
+        writingQueue = chunks.makeIterator()
+        writingQueueChunkIndex = 0
+        drainWritingQueue()
+    }
+
+    private func drainWritingQueue() {
+        if writingQueue != nil {
+            if var chunk = writingQueue?.next() {
+                var firstByte: Data.Element
+                writingQueueChunkIndex += 1
+                if writingQueueChunkIndex == writingQueueTotalChunks {
+                    firstByte = 0x00
+                } else {
+                    firstByte = 0x01
+                }
+                chunk.reverse()
+                chunk.append(firstByte)
+                chunk.reverse()
+                let percentage = 100 * writingQueueChunkIndex / writingQueueTotalChunks
+                self.callback.callback(message: .progress("Sending chunks: \(percentage)%"))
+                peripheral?.writeValue(_: chunk,
+                                       for: writeCharacteristic!,
+                                       type: CBCharacteristicWriteType.withoutResponse)
+            } else {
+                self.callback.callback(message: .progress("Sending chunks: 100%"))
+                writingQueue = nil
+            }
+        }
     }
 
     func processCharacteristics(peripheral: CBPeripheral, characteristics: [CBCharacteristic]) throws {
@@ -53,6 +107,7 @@ class MDocHolderBLECentral: NSObject {
                     characteristicName: "State"
                 )
             }
+            self.stateCharacteristic = characteristic
         } else {
             throw CharacteristicsError.missingMandatoryCharacteristic(name: "State")
         }
@@ -73,6 +128,7 @@ class MDocHolderBLECentral: NSObject {
             if !characteristic.properties.contains(CBCharacteristicProperties.notify) {
                 throw CharacteristicsError.missingMandatoryProperty(name: "notify", characteristicName: "Server2Client")
             }
+            self.readCharacteristic = characteristic
         } else {
             throw CharacteristicsError.missingMandatoryCharacteristic(name: "Server2Client")
         }
@@ -91,10 +147,19 @@ class MDocHolderBLECentral: NSObject {
                 throw CharacteristicsError.missingMandatoryProperty(name: "read", characteristicName: "L2CAP")
             }
         }
+
+//       iOS controls MTU negotiation. Since MTU is just a maximum, we can use a lower value than the negotiated value.
+//       18013-5 expects an upper limit of 515 MTU, so we cap at this even if iOS negotiates a higher value.
+//       
+//       maximumWriteValueLength() returns the maximum characteristic size, which is 3 less than the MTU.
+       let negotiatedMaximumCharacteristicSize = peripheral.maximumWriteValueLength(for: .withoutResponse)
+       maximumCharacteristicSize = min(negotiatedMaximumCharacteristicSize - 3, 512)
+
     }
 
     func processData(peripheral: CBPeripheral, characteristic: CBCharacteristic) throws {
         if var data = characteristic.value {
+            print("Processing data for \(characteristic.uuid)")
             switch characteristic.uuid {
             case readerStateCharacteristicId:
                 if data.count != 1 {
@@ -102,7 +167,8 @@ class MDocHolderBLECentral: NSObject {
                 }
                 switch data[0] {
                 case 0x02:
-                    self.disconnectFromDevice()
+                    self.callback.callback(message: .done)
+                    self.disconnect()
                 case let byte:
                     throw DataError.unknownState(byte: byte)
                 }
@@ -113,16 +179,23 @@ class MDocHolderBLECentral: NSObject {
                 case .none:
                     throw DataError.noData(characteristic: characteristic.uuid)
                 case 0x00: // end
+                    print("End of message")
                     self.callback.callback(message: MDocBLECallback.message(incomingMessageBuffer))
                     self.incomingMessageBuffer = Data()
                     return
                 case 0x01: // partial
+                    print("Partial message")
                     // TODO check length against MTU
                     return
                 case let .some(byte):
                     throw DataError.unknownDataTransferPrefix(byte: byte)
                 }
             case readerIdentCharacteristicId:
+                self.peripheral?.setNotifyValue(true, for: self.readCharacteristic!)
+                self.peripheral?.setNotifyValue(true, for: self.stateCharacteristic!)
+                self.peripheral?.writeValue(_: Data([0x01]),
+                                            for: self.stateCharacteristic!,
+                                            type: CBCharacteristicWriteType.withoutResponse)
                 return
             case readerL2CAPCharacteristicId:
                 return
@@ -185,13 +258,16 @@ extension MDocHolderBLECentral: CBCentralManagerDelegate {
                         didDiscover peripheral: CBPeripheral,
                         advertisementData: [String: Any],
                         rssi RSSI: NSNumber) {
+        print("Discovered peripheral")
         peripheral.delegate = self
         self.peripheral = peripheral
         centralManager?.connect(peripheral, options: nil)
     }
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        print("Connected to peripheral")
         centralManager?.stopScan()
         peripheral.discoverServices([self.serviceUuid])
+        self.callback.callback(message: .connected)
     }
 }
 
@@ -204,6 +280,7 @@ extension MDocHolderBLECentral: CBPeripheralDelegate {
             return
         }
         if let services = peripheral.services {
+            print("Discovered services")
             for service in services {
                 peripheral.discoverCharacteristics(nil, for: service)
             }
@@ -218,6 +295,7 @@ extension MDocHolderBLECentral: CBPeripheralDelegate {
             return
         }
         if let characteristics = service.characteristics {
+            print("Discovered characteristics")
             do {
                 try self.processCharacteristics(peripheral: peripheral, characteristics: characteristics)
             } catch {
@@ -229,11 +307,20 @@ extension MDocHolderBLECentral: CBPeripheralDelegate {
 
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         do {
+            print("Processing data")
             try self.processData(peripheral: peripheral, characteristic: characteristic)
         } catch {
             self.callback.callback(message: MDocBLECallback.error("\(error)"))
             centralManager?.cancelPeripheralConnection(peripheral)
         }
+    }
+
+    /// Notifies that the peripheral write buffer has space for more chunks.
+    /// This is called after the buffer gets filled to capacity, and then has space again.
+    ///
+    /// Only available on iOS 11 and up.
+    func peripheralIsReady(toSendWriteWithoutResponse peripheral: CBPeripheral) {
+        drainWritingQueue()
     }
 }
 
