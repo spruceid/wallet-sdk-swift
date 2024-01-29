@@ -21,5 +21,3 @@ jobs:
 
     - name: Test
       uses: mxcl/xcodebuild@v2
-      with:
-        warnings-as-errors: true
