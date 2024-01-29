@@ -16,6 +16,7 @@ jobs:
       uses: mxcl/xcodebuild@v2
       with:
         swift: ^5.9
+        xcode: ^15
 
     - name: Lint
       run: swiftlint
