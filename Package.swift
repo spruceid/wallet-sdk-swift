@@ -14,8 +14,8 @@ let package = Package(
             targets: ["WalletSdk"])
     ],
     dependencies: [
-        // .package(url: "https://github.com/spruceid/wallet-sdk-rs.git", from: "0.0.2"),
-        .package(path: "../wallet-sdk-rs"),
+        .package(url: "https://github.com/spruceid/wallet-sdk-rs.git", from: "0.0.4"),
+        // .package(path: "../wallet-sdk-rs"),
         .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.0")
     ],
     targets: [

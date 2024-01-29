@@ -3,9 +3,9 @@ options:
   bundleIdPrefix: com.spruceid.wallet.sdk
 packages:
   WalletSdkRs:
-    # url: https://github.com/spruceid/wallet-sdk-rs
-    # from: 0.0.2
-    path: "../wallet-sdk-rs"
+    url: https://github.com/spruceid/wallet-sdk-rs
+    from: 0.0.4
+    # path: "../wallet-sdk-rs"
   SwiftAlgorithms:
     url: https://github.com/apple/swift-algorithms
     from: 1.2.0
