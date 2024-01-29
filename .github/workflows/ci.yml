@@ -11,11 +11,6 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: swift-actions/setup-swift@v1
-      with:
-        # Current latest is 5.9.2 but it fails to install swiftlint
-        # 'swiftlint' 0.54.0 contains incompatible tools version (5.9.0)
-        swift-version: "5.9.0"
 
     - uses: Homebrew/actions/setup-homebrew@master
     - run: brew install xcodegen
@@ -25,3 +20,5 @@ jobs:
 
     - name: Test
       uses: mxcl/xcodebuild@v2
+      with:
+        swift: ^5.9
