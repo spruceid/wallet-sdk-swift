@@ -12,11 +12,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - uses: Homebrew/actions/setup-homebrew@master
+    - run: brew install xcodegen
+
+    - name: Generate XCode project
+      run: xcodegen
+
     - name: Test
-      uses: mxcl/xcodebuild@v2
-      with:
-        swift: ^5.9
-        xcode: ^15
+      run: xcodebuild -scheme WalletSdk -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2' test
 
     - name: Lint
       run: swiftlint
