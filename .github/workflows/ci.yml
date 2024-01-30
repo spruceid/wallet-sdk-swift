@@ -12,7 +12,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - uses: mxcl/xcodebuild@v2
+    - name: Test
+      uses: mxcl/xcodebuild@v2
       with:
         platform: iOS
-      #   xcode: ^15
+
+    - name: Lint
+      run: swiftlint
