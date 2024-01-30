@@ -8,10 +8,10 @@ on:
 
 jobs:
   swift:
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
     - uses: actions/checkout@v4
 
     - uses: mxcl/xcodebuild@v2
-      with:
-        xcode: ^15
+      # with:
+      #   xcode: ^15
