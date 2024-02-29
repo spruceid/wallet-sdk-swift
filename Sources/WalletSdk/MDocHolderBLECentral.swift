@@ -2,7 +2,7 @@ import Algorithms
 import CoreBluetooth
 import Foundation
 import os
-import WalletSdkRs
+import SpruceIDWalletSdkRs
 
 enum CharacteristicsError: Error {
     case missingMandatoryCharacteristic(name: String)

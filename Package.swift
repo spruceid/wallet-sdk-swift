@@ -4,30 +4,30 @@
 import PackageDescription
 
 let package = Package(
-    name: "WalletSdk",
+    name: "SpruceIDWalletSdk",
     platforms: [
         .iOS(.v13)
     ],
     products: [
         .library(
-            name: "WalletSdk",
-            targets: ["WalletSdk"])
+            name: "SpruceIDWalletSdk",
+            targets: ["SpruceIDWalletSdk"])
     ],
     dependencies: [
-        .package(url: "https://github.com/spruceid/wallet-sdk-rs.git", from: "0.0.4"),
+        .package(url: "https://github.com/spruceid/wallet-sdk-rs.git", from: "0.0.13"),
         // .package(path: "../wallet-sdk-rs"),
         .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.0")
     ],
     targets: [
         .target(
-            name: "WalletSdk",
+            name: "SpruceIDWalletSdk",
             dependencies: [
-                .product(name: "WalletSdkRs", package: "wallet-sdk-rs"),
+                .product(name: "SpruceIDWalletSdkRs", package: "wallet-sdk-rs"),
                 .product(name: "Algorithms", package: "swift-algorithms")
             ]
         ),
         .testTarget(
-            name: "WalletSdkTests",
-            dependencies: ["WalletSdk"])
+            name: "SpruceIDWalletSdkTests",
+            dependencies: ["SpruceIDWalletSdk"])
     ]
 )

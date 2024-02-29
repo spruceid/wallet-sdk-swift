@@ -2,7 +2,7 @@ name: WalletSdk
 options:
   bundleIdPrefix: com.spruceid.wallet.sdk
 packages:
-  WalletSdkRs:
+  SpruceIDWalletSdkRs:
     url: https://github.com/spruceid/wallet-sdk-rs
     from: 0.0.4
     # path: "../wallet-sdk-rs"
@@ -24,7 +24,7 @@ targets:
     sources:
       - Sources
     dependencies:
-      - package: WalletSdkRs
+      - package: SpruceIDWalletSdkRs
       - package: SwiftAlgorithms
         product: Algorithms
     scheme:
