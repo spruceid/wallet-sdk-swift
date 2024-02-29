@@ -1,14 +1,14 @@
 import CoreBluetooth
 import CryptoKit
 import Foundation
-import WalletSdkRs
+import SpruceIDWalletSdkRs
 
 public typealias Namespace = String
 public typealias IssuerSignedItemBytes = Data
-public typealias ItemsRequest = WalletSdkRs.ItemsRequest
+public typealias ItemsRequest = SpruceIDWalletSdkRs.ItemsRequest
 
 public class MDoc: Credential {
-    var inner: WalletSdkRs.MDoc
+    var inner: SpruceIDWalletSdkRs.MDoc
     var keyAlias: String
 
     /// issuerAuth is the signed MSO (i.e. CoseSign1 with MSO as payload)
@@ -18,7 +18,7 @@ public class MDoc: Credential {
     public init?(fromMDoc issuerAuth: Data, namespaces: [Namespace: [IssuerSignedItemBytes]], keyAlias: String) {
         self.keyAlias = keyAlias
         do {
-            try self.inner = WalletSdkRs.MDoc.fromCbor(value: issuerAuth)
+            try self.inner = SpruceIDWalletSdkRs.MDoc.fromCbor(value: issuerAuth)
         } catch {
             print("\(error)")
             return nil
@@ -50,7 +50,7 @@ public class BLESessionManager {
         self.uuid = UUID()
         self.mdoc = mdoc
         do {
-            let sessionData = try WalletSdkRs.initialiseSession(document: mdoc.inner, uuid: self.uuid.uuidString)
+            let sessionData = try SpruceIDWalletSdkRs.initialiseSession(document: mdoc.inner, uuid: self.uuid.uuidString)
             self.state = sessionData.state
             bleManager = MDocHolderBLECentral(callback: self, serviceUuid: CBUUID(nsuuid: self.uuid))
             self.callback.update(state: .engagingQRCode(sessionData.qrCodeUri.data(using: .ascii)!))
@@ -67,7 +67,7 @@ public class BLESessionManager {
 
     public func submitNamespaces(items: [String: [String: [String]]]) {
         do {
-            let responseData = try WalletSdkRs.submitResponse(sessionManager: sessionManager!,
+            let responseData = try SpruceIDWalletSdkRs.submitResponse(sessionManager: sessionManager!,
                                                               itemsRequests: itemsRequests!,
                                                               permittedItems: items)
             let query = [kSecClass: kSecClassKey,
@@ -99,7 +99,7 @@ public class BLESessionManager {
             }
             let privateKey = try P256.Signing.PrivateKey(x963Representation: data)
             let signature = try privateKey.signature(for: responseData.payload)
-            let signatureData = try WalletSdkRs.submitSignature(sessionManager: sessionManager!,
+            let signatureData = try SpruceIDWalletSdkRs.submitSignature(sessionManager: sessionManager!,
                                                                 signature: signature.derRepresentation)
             self.state = signatureData.state
             self.bleManager.writeOutgoingValue(data: signatureData.response)
@@ -121,7 +121,7 @@ extension BLESessionManager: MDocBLEDelegate {
             self.callback.update(state: .progress(message))
         case .message(let data):
             do {
-                let requestData = try WalletSdkRs.handleRequest(state: self.state, request: data)
+                let requestData = try SpruceIDWalletSdkRs.handleRequest(state: self.state, request: data)
                 self.sessionManager = requestData.sessionManager
                 self.itemsRequests = requestData.itemsRequests
                 let req = requestData.itemsRequests

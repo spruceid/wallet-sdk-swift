@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
-  spec.name         = "WalletSdk"
-  spec.version      = "0.0.3"
+  spec.name         = "SpruceIDWalletSdk"
+  spec.version      = "0.0.4"
   spec.summary      = "Swift Wallet SDK."
   spec.description  = <<-DESC
                    Swift Wallet SDK.
@@ -9,13 +9,15 @@ Pod::Spec.new do |spec|
   spec.license      = "MIT OR Apache-2.0"
   spec.author       = { "Spruce Systems, Inc." => "hello@spruceid.com" }
   spec.platform     = :ios
+  spec.swift_version = '5.9'
 
   spec.ios.deployment_target  = '13.0'
 
-  spec.source        = { :git => "https://spruceid/wallet-sdk-swift.git", :tag => "#{spec.version}" }
+  spec.source        = { :git => "https://github.com/spruceid/wallet-sdk-swift.git", :tag => "#{spec.version}" }
   spec.source_files  = "Sources/WalletSdk/*.swift"
 
   spec.static_framework = true
-  spec.dependency 'WalletSdkRs' "~> 0.0.6"
-  spec.dependency 'SwiftAlgorithm' "~> 1.0.0"
+  spec.dependency 'SpruceIDWalletSdkRs', "~> 0.0.18"
+  spec.dependency 'SwiftAlgorithms', "~> 1.0.0"
+  spec.frameworks = 'Foundation', 'CoreBluetooth', 'CryptoKit'
 end

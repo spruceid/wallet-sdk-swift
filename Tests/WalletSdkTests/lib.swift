@@ -1,5 +1,5 @@
 import XCTest
-@testable import WalletSdk
+@testable import SpruceIDWalletSdk
 
 class HelloTests: XCTestCase {
     func testHelloRust() {
