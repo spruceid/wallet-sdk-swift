@@ -3,7 +3,7 @@ Pod::Spec.new do |spec|
   spec.version      = "0.0.4"
   spec.summary      = "Swift Wallet SDK."
   spec.description  = <<-DESC
-                   Swift Wallet SDK.
+                   SpruceID Swift Wallet SDK.
                    DESC
   spec.homepage     = "https://github.com/spruceid/wallet-sdk-swift"
   spec.license      = { :type => "MIT & Apache License, Version 2.0", :text => <<-LICENSE
