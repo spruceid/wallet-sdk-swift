@@ -10,6 +10,7 @@ jobs:
   validation:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v4
     - name: Validate tag is valid
       run: |
         echo "${{ github.ref_name }}" | grep -P '^[0-9]+\.[0-9]+\.[0-9]+'
