@@ -50,7 +50,8 @@ public class BLESessionManager {
         self.uuid = UUID()
         self.mdoc = mdoc
         do {
-            let sessionData = try SpruceIDWalletSdkRs.initialiseSession(document: mdoc.inner, uuid: self.uuid.uuidString)
+            let sessionData = try SpruceIDWalletSdkRs.initialiseSession(document: mdoc.inner,
+                                                                        uuid: self.uuid.uuidString)
             self.state = sessionData.state
             bleManager = MDocHolderBLECentral(callback: self, serviceUuid: CBUUID(nsuuid: self.uuid))
             self.callback.update(state: .engagingQRCode(sessionData.qrCodeUri.data(using: .ascii)!))
