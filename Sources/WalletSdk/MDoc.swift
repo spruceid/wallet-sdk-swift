@@ -82,19 +82,16 @@ public class BLESessionManager {
                 secKey = item as! SecKey
                 // swiftlint:enable force_cast
             case errSecItemNotFound:
-                self.callback.update(state: .error("Key not found"))
+                self.callback.update(state: .error(.generic("Key not found")))
                 self.cancel()
                 return
             case let status:
-                self.callback.update(state: .error("Keychain read failed: \(status)"))
+                self.callback.update(state: .error(.generic("Keychain read failed: \(status)")))
                 self.cancel()
                 return
             }
             var error: Unmanaged<CFError>?
-            guard let derSignature = SecKeyCreateSignature(secKey,
-                                                           .ecdsaSignatureMessageX962SHA256,
-                                                           payload as CFData,
-                                                           &error) as Data? else {
+            guard let data = SecKeyCopyExternalRepresentation(secKey, &error) as Data? else {
                 self.callback.update(state: .error("Failed to sign message: \(error.debugDescription)"))
                 self.cancel()
                 return
@@ -103,7 +100,7 @@ public class BLESessionManager {
                                                                      derSignature: derSignature)
             self.bleManager.writeOutgoingValue(data: response)
         } catch {
-            self.callback.update(state: .error("\(error)"))
+            self.callback.update(state: .error(.generic("\(error)")))
             self.cancel()
         }
     }
@@ -115,34 +112,51 @@ extension BLESessionManager: MDocBLEDelegate {
         case .done:
             self.callback.update(state: .success)
         case .connected:
-            self.callback.update(state: .progress("Connected"))
-        case .progress(let message):
-            self.callback.update(state: .progress(message))
+            self.callback.update(state: .connected)
+        case .chunkSent(let percentage):
+            self.callback.update(state: .chunkSent(percentage))
         case .message(let data):
             do {
                 let requestData = try SpruceIDWalletSdkRs.handleRequest(state: self.state, request: data)
                 self.sessionManager = requestData.sessionManager
                 self.callback.update(state: .selectNamespaces(requestData.itemsRequests))
             } catch {
-                self.callback.update(state: .error("\(error)"))
+                self.callback.update(state: .error(.generic("\(error)")))
                 self.cancel()
             }
         case .error(let error):
-            self.callback.update(state: .error("\(error)"))
+            self.callback.update(state: .error(BleSessionError(holderBleError: error)))
             self.cancel()
+        }
+    }
+}
+
+public enum BleSessionError {
+    case bleStack(String)
+    case unauthorized(String)
+    case generic(String)
+    
+    init(holderBleError: MdocHolderBleError) {
+        switch holderBleError {
+        case .bleStack(let string):
+            self = .bleStack(string)
+        case .unauthorized(let string):
+            self = .unauthorized(string)
         }
     }
 }
 
 public enum BLESessionState {
     /// App should display the error message
-    case error(String)
+    case error(BleSessionError)
     /// App should display the QR code
     case engagingQRCode(Data)
-    /// App should indicate to the user that progress is being made
-    case progress(String)
+    /// App should indicate to the user that BLE connection has been made
+    case connected
     /// App should display an interactive page for the user to chose which values to reveal
     case selectNamespaces([ItemsRequest])
+    /// App should display the fact that a certain percentage of data has been sent
+    case chunkSent(Int)
     /// App should display a success message and offer to close the page
     case success
 }
