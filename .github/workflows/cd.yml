@@ -23,6 +23,14 @@ jobs:
     needs: validation
     steps:
     - uses: actions/checkout@v4
+    # Needed because pod trunk push --synchronous clones a massive repo
+    - name: Cocoapods Cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.cocoapods/repos
+        key: ${{ runner.os }}-cocoapods
+        save-always: true
+
     - name: Publish to CocoaPod register
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
