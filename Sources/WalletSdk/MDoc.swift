@@ -9,14 +9,12 @@ public typealias ItemsRequest = SpruceIDWalletSdkRs.ItemsRequest
 
 public class MDoc: Credential {
     var inner: SpruceIDWalletSdkRs.MDoc
-    var keyAlias: String
 
     /// issuerAuth is the signed MSO (i.e. CoseSign1 with MSO as payload)
     /// namespaces is the full set of namespaces with data items and their value
     /// IssuerSignedItemBytes will be bytes, but its composition is defined here
     /// https://github.com/spruceid/isomdl/blob/f7b05dfa/src/definitions/issuer_signed.rs#L18
-    public init?(fromMDoc issuerAuth: Data, namespaces: [Namespace: [IssuerSignedItemBytes]], keyAlias: String) {
-        self.keyAlias = keyAlias
+    public init?(fromMDoc issuerAuth: Data, namespaces: [Namespace: [IssuerSignedItemBytes]]) {
         do {
             try self.inner = SpruceIDWalletSdkRs.MDoc.fromCbor(value: issuerAuth)
         } catch {
@@ -43,12 +41,14 @@ public class BLESessionManager {
     var sessionManager: SessionManager?
     var itemsRequests: [ItemsRequest]?
     var mdoc: MDoc
+    var privateKey: SigningKey
     var bleManager: MDocHolderBLECentral!
 
-    init?(mdoc: MDoc, engagement: DeviceEngagement, callback: BLESessionStateDelegate) {
+    init?(mdoc: MDoc, privateKey: SigningKey, engagement: DeviceEngagement, callback: BLESessionStateDelegate) {
         self.callback = callback
         self.uuid = UUID()
         self.mdoc = mdoc
+        self.privateKey = privateKey
         do {
             let sessionData = try SpruceIDWalletSdkRs.initialiseSession(document: mdoc.inner,
                                                                         uuid: self.uuid.uuidString)
@@ -71,37 +71,10 @@ public class BLESessionManager {
             let responseData = try SpruceIDWalletSdkRs.submitResponse(sessionManager: sessionManager!,
                                                               itemsRequests: itemsRequests!,
                                                               permittedItems: items)
-            let query = [kSecClass: kSecClassKey,
-          kSecAttrApplicationLabel: self.mdoc.keyAlias,
-                     kSecReturnRef: true] as [String: Any]
-
-            // Find and cast the result as a SecKey instance.
-            var item: CFTypeRef?
-            var secKey: SecKey
-            switch SecItemCopyMatching(query as CFDictionary, &item) {
-            case errSecSuccess:
-                // swiftlint:disable force_cast
-                secKey = item as! SecKey
-                // swiftlint:enable force_cast
-            case errSecItemNotFound:
-                self.callback.update(state: .error("Key not found"))
-                self.cancel()
-                return
-            case let status:
-                self.callback.update(state: .error("Keychain read failed: \(status)"))
-                self.cancel()
-                return
-            }
-            var error: Unmanaged<CFError>?
-            guard let data = SecKeyCopyExternalRepresentation(secKey, &error) as Data? else {
-                self.callback.update(state: .error("Failed to cast key: \(error.debugDescription)"))
-                self.cancel()
-                return
-            }
-            let privateKey = try P256.Signing.PrivateKey(x963Representation: data)
-            let signature = try privateKey.signature(for: responseData.payload)
+            
+            let signature = try self.privateKey.signature(data: responseData.payload)
             let signatureData = try SpruceIDWalletSdkRs.submitSignature(sessionManager: sessionManager!,
-                                                                signature: signature.derRepresentation)
+                                                                signature: signature)
             self.state = signatureData.state
             self.bleManager.writeOutgoingValue(data: signatureData.response)
         } catch {
