@@ -135,7 +135,7 @@ public enum BleSessionError {
     case bleStack(String)
     case unauthorized(String)
     case generic(String)
-    
+
     init(holderBleError: MdocHolderBleError) {
         switch holderBleError {
         case .bleStack(let string):
