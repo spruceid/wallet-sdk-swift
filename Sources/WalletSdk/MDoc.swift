@@ -71,7 +71,7 @@ public class BLESessionManager {
             let responseData = try SpruceIDWalletSdkRs.submitResponse(sessionManager: sessionManager!,
                                                               itemsRequests: itemsRequests!,
                                                               permittedItems: items)
-            
+
             let signature = try self.privateKey.signature(data: responseData.payload)
             let signatureData = try SpruceIDWalletSdkRs.submitSignature(sessionManager: sessionManager!,
                                                                 signature: signature)
