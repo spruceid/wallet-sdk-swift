@@ -101,7 +101,7 @@ public class BLESessionManager {
             let privateKey = try P256.Signing.PrivateKey(x963Representation: data)
             let signature = try privateKey.signature(for: responseData.payload)
             let signatureData = try SpruceIDWalletSdkRs.submitSignature(sessionManager: sessionManager!,
-                                                                signature: signature.derRepresentation)
+                                                                signature: signature.rawRepresentation)
             self.state = signatureData.state
             self.bleManager.writeOutgoingValue(data: signatureData.response)
         } catch {
