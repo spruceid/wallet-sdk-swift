@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "SpruceIDWalletSdk"
-  spec.version      = "0.0.4"
+  spec.version      = "0.0.5"
   spec.summary      = "Swift Wallet SDK."
   spec.description  = <<-DESC
                    SpruceID Swift Wallet SDK.
