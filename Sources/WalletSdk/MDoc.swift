@@ -91,15 +91,17 @@ public class BLESessionManager {
                 return
             }
             var error: Unmanaged<CFError>?
-            guard let data = SecKeyCopyExternalRepresentation(secKey, &error) as Data? else {
-                self.callback.update(state: .error("Failed to cast key: \(error.debugDescription)"))
+            guard let derSignature = SecKeyCreateSignature(secKey,
+                                                           .ecdsaSignatureMessageX962SHA256,
+                                                           payload as CFData,
+                                                           &error) as Data? else {
+                self.callback.update(state: .error("Failed to sign message: \(error.debugDescription)"))
                 self.cancel()
                 return
             }
-            let privateKey = try P256.Signing.PrivateKey(x963Representation: data)
-            let signature = try privateKey.signature(for: payload)
+            let signature = try P256.Signing.ECDSASignature(derRepresentation: derSignature)
             let response = try SpruceIDWalletSdkRs.submitSignature(sessionManager: sessionManager!,
-                                                           signature: signature.rawRepresentation)
+                                                                        signature: signature.rawRepresentation)
             self.bleManager.writeOutgoingValue(data: response)
         } catch {
             self.callback.update(state: .error("\(error)"))
