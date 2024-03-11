@@ -99,9 +99,8 @@ public class BLESessionManager {
                 self.cancel()
                 return
             }
-            let signature = try P256.Signing.ECDSASignature(derRepresentation: derSignature)
             let response = try SpruceIDWalletSdkRs.submitSignature(sessionManager: sessionManager!,
-                                                                        signature: signature.rawRepresentation)
+                                                                     derSignature: derSignature)
             self.bleManager.writeOutgoingValue(data: response)
         } catch {
             self.callback.update(state: .error("\(error)"))
