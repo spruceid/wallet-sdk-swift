@@ -12,3 +12,28 @@ security firm before the v1.0 release.
 ## Setup
 
 The XCode project is generated using `xcodgen`.
+
+## Architecture
+
+Our Wallet SDKs use shared code, with most of the logic being written once in
+Rust, and when not possible, native APIs (e.g. Bluetooth, OS Keychain) are
+called in native SDKs.
+
+```
+  ┌────────────┐
+  │React Native│
+  └──────┬─────┘
+         │
+    ┌────┴────┐
+┌───▼──┐   ┌──▼──┐
+│Kotlin│   │Swift│
+└───┬──┘   └──┬──┘
+    └────┬────┘
+         │
+      ┌──▼─┐
+      │Rust│
+      └────┘
+```
+- [Kotlin SDK](https://github.com/spruceid/wallet-sdk-kt)
+- [Swift SDK](https://github.com/spruceid/wallet-sdk-swift)
+- [Rust layer](https://github.com/spruceid/wallet-sdk-rs)
