@@ -39,9 +39,8 @@ public protocol BLESessionStateDelegate: AnyObject {
 public class BLESessionManager {
     var callback: BLESessionStateDelegate
     var uuid: UUID
-    var state: String
+    var state: SessionManagerEngaged
     var sessionManager: SessionManager?
-    var itemsRequests: [ItemsRequest]?
     var mdoc: MDoc
     var bleManager: MDocHolderBLECentral!
 
@@ -68,9 +67,8 @@ public class BLESessionManager {
 
     public func submitNamespaces(items: [String: [String: [String]]]) {
         do {
-            let responseData = try SpruceIDWalletSdkRs.submitResponse(sessionManager: sessionManager!,
-                                                              itemsRequests: itemsRequests!,
-                                                              permittedItems: items)
+            let payload = try SpruceIDWalletSdkRs.submitResponse(sessionManager: sessionManager!,
+                                                                 permittedItems: items)
             let query = [kSecClass: kSecClassKey,
           kSecAttrApplicationLabel: self.mdoc.keyAlias,
                      kSecReturnRef: true] as [String: Any]
@@ -99,11 +97,10 @@ public class BLESessionManager {
                 return
             }
             let privateKey = try P256.Signing.PrivateKey(x963Representation: data)
-            let signature = try privateKey.signature(for: responseData.payload)
-            let signatureData = try SpruceIDWalletSdkRs.submitSignature(sessionManager: sessionManager!,
-                                                                signature: signature.rawRepresentation)
-            self.state = signatureData.state
-            self.bleManager.writeOutgoingValue(data: signatureData.response)
+            let signature = try privateKey.signature(for: payload)
+            let response = try SpruceIDWalletSdkRs.submitSignature(sessionManager: sessionManager!,
+                                                           signature: signature.rawRepresentation)
+            self.bleManager.writeOutgoingValue(data: response)
         } catch {
             self.callback.update(state: .error("\(error)"))
             self.cancel()
@@ -124,9 +121,7 @@ extension BLESessionManager: MDocBLEDelegate {
             do {
                 let requestData = try SpruceIDWalletSdkRs.handleRequest(state: self.state, request: data)
                 self.sessionManager = requestData.sessionManager
-                self.itemsRequests = requestData.itemsRequests
-                let req = requestData.itemsRequests
-                self.callback.update(state: .selectNamespaces(req))
+                self.callback.update(state: .selectNamespaces(requestData.itemsRequests))
             } catch {
                 self.callback.update(state: .error("\(error)"))
                 self.cancel()
