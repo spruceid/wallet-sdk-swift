@@ -84,13 +84,12 @@ class MDocHolderBLECentral: NSObject {
                 chunk.reverse()
                 chunk.append(firstByte)
                 chunk.reverse()
-                let percentage = 100 * writingQueueChunkIndex / writingQueueTotalChunks
-                self.callback.callback(message: .progress("Sending chunks: \(percentage)%"))
+                self.callback.callback(message: .uploadProgress(writingQueueChunkIndex, writingQueueTotalChunks))
                 peripheral?.writeValue(_: chunk,
                                        for: writeCharacteristic!,
                                        type: CBCharacteristicWriteType.withoutResponse)
             } else {
-                self.callback.callback(message: .progress("Sending chunks: 100%"))
+                self.callback.callback(message: .uploadProgress(writingQueueTotalChunks, writingQueueTotalChunks))
                 writingQueue = nil
             }
         }
@@ -210,48 +209,10 @@ class MDocHolderBLECentral: NSObject {
 
 extension MDocHolderBLECentral: CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        switch central.state {
-        case .poweredOff:
-            print("Is Powered Off.")
-        case .poweredOn:
-            print("Is Powered On.")
+        if central.state == .poweredOn {
             startScanning()
-        case .unsupported:
-            print("Is Unsupported.")
-        case .unauthorized:
-            if #available(iOS 13.1, *) {
-                switch CBManager.authorization {
-                case .denied:
-                    print("Authorization denied")
-                case .restricted:
-                    print("Authorization restricted")
-                case .allowedAlways:
-                    print("Authorized")
-                case .notDetermined:
-                    print("Authorization not determined")
-                @unknown default:
-                    print("Unknown authorization error")
-                }
-            } else {
-                switch central.authorization {
-                case .denied:
-                    print("Authorization denied")
-                case .restricted:
-                    print("Authorization restricted")
-                case .allowedAlways:
-                    print("Authorized")
-                case .notDetermined:
-                    print("Authorization not determined")
-                @unknown default:
-                    print("Unknown authorization error")
-                }
-            }
-        case .unknown:
-            print("Unknown")
-        case .resetting:
-            print("Resetting")
-        @unknown default:
-            print("Error")
+        } else {
+            self.callback.callback(message: .error(.bluetooth(central)))
         }
     }
     func centralManager(_ central: CBCentralManager,
@@ -275,7 +236,7 @@ extension MDocHolderBLECentral: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if (error) != nil {
             self.callback.callback(
-                message: MDocBLECallback.error("Error discovering services: \(error!.localizedDescription)")
+                message: .error(.peripheral("Error discovering services: \(error!.localizedDescription)"))
             )
             return
         }
@@ -290,7 +251,7 @@ extension MDocHolderBLECentral: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if (error) != nil {
             self.callback.callback(
-                message: MDocBLECallback.error("Error discovering characteristics: \(error!.localizedDescription)")
+                message: .error(.peripheral("Error discovering characteristics: \(error!.localizedDescription)"))
             )
             return
         }
@@ -299,7 +260,7 @@ extension MDocHolderBLECentral: CBPeripheralDelegate {
             do {
                 try self.processCharacteristics(peripheral: peripheral, characteristics: characteristics)
             } catch {
-                self.callback.callback(message: MDocBLECallback.error("\(error)"))
+                self.callback.callback(message: .error(.peripheral("\(error)")))
                 centralManager?.cancelPeripheralConnection(peripheral)
             }
         }
@@ -310,7 +271,7 @@ extension MDocHolderBLECentral: CBPeripheralDelegate {
             print("Processing data")
             try self.processData(peripheral: peripheral, characteristic: characteristic)
         } catch {
-            self.callback.callback(message: MDocBLECallback.error("\(error)"))
+            self.callback.callback(message: .error(.peripheral("\(error)")))
             centralManager?.cancelPeripheralConnection(peripheral)
         }
     }

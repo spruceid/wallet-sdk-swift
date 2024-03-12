@@ -11,12 +11,20 @@ let readerServer2ClientCharacteristicId = CBUUID(string: "00000007-A123-48CE-896
 let readerIdentCharacteristicId = CBUUID(string: "00000008-A123-48CE-896B-4C76973373E6")
 let readerL2CAPCharacteristicId = CBUUID(string: "0000000B-A123-48CE-896B-4C76973373E6")
 
+enum MdocHolderBleError {
+    /// When discovery or communication with the peripheral fails
+    case peripheral(String)
+    /// When Bluetooth is unusable (e.g. unauthorized).
+    case bluetooth(CBCentralManager)
+}
+
 enum MDocBLECallback {
     case done
     case connected
     case message(Data)
-    case error(String)
-    case progress(String)
+    case error(MdocHolderBleError)
+    /// Chunks sent so far and total number of chunks to be sent
+    case uploadProgress(Int, Int)
 }
 
 protocol MDocBLEDelegate: AnyObject {
