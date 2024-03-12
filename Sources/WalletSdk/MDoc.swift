@@ -91,8 +91,11 @@ public class BLESessionManager {
                 return
             }
             var error: Unmanaged<CFError>?
-            guard let data = SecKeyCopyExternalRepresentation(secKey, &error) as Data? else {
-                self.callback.update(state: .error("Failed to sign message: \(error.debugDescription)"))
+            guard let derSignature = SecKeyCreateSignature(secKey,
+                                                           .ecdsaSignatureMessageX962SHA256,
+                                                           payload as CFData,
+                                                           &error) as Data? else {
+                self.callback.update(state: .error(.generic("Failed to sign message: \(error.debugDescription)")))
                 self.cancel()
                 return
             }
@@ -113,8 +116,8 @@ extension BLESessionManager: MDocBLEDelegate {
             self.callback.update(state: .success)
         case .connected:
             self.callback.update(state: .connected)
-        case .chunkSent(let percentage):
-            self.callback.update(state: .chunkSent(percentage))
+        case .uploadProgress(let value, let total):
+            self.callback.update(state: .uploadProgress(value, total))
         case .message(let data):
             do {
                 let requestData = try SpruceIDWalletSdkRs.handleRequest(state: self.state, request: data)
@@ -132,16 +135,19 @@ extension BLESessionManager: MDocBLEDelegate {
 }
 
 public enum BleSessionError {
-    case bleStack(String)
-    case unauthorized(String)
+    /// When discovery or communication with the peripheral fails
+    case peripheral(String)
+    /// When Bluetooth is unusable (e.g. unauthorized).
+    case bluetooth(CBCentralManager)
+    /// Generic unrecoverable error
     case generic(String)
 
     init(holderBleError: MdocHolderBleError) {
         switch holderBleError {
-        case .bleStack(let string):
-            self = .bleStack(string)
-        case .unauthorized(let string):
-            self = .unauthorized(string)
+        case .peripheral(let string):
+            self = .peripheral(string)
+        case .bluetooth(let string):
+            self = .bluetooth(string)
         }
     }
 }
@@ -156,7 +162,10 @@ public enum BLESessionState {
     /// App should display an interactive page for the user to chose which values to reveal
     case selectNamespaces([ItemsRequest])
     /// App should display the fact that a certain percentage of data has been sent
-    case chunkSent(Int)
+    /// - Parameters:
+    ///   - 0: The number of chunks sent to far
+    ///   - 1: The total number of chunks to be sent
+    case uploadProgress(Int, Int)
     /// App should display a success message and offer to close the page
     case success
 }
