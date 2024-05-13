@@ -21,7 +21,6 @@ Pod::Spec.new do |spec|
 
   spec.static_framework = true
   spec.dependency 'SpruceIDWalletSdkRs', "~> 0.0.24"
-  spec.dependency 'SwiftUIBackports', "~> 2.0.0"
   spec.dependency 'SwiftAlgorithms', "~> 1.0.0"
   spec.frameworks = 'Foundation', 'CoreBluetooth', 'CryptoKit'
 end

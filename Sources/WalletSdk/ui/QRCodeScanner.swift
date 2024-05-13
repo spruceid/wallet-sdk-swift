@@ -1,6 +1,5 @@
 import SwiftUI
 import AVKit
-import SwiftUIBackports
 import os.log
 
 public class QRScannerDelegate: NSObject, ObservableObject, AVCaptureMetadataOutputObjectsDelegate {
@@ -69,7 +68,7 @@ public struct QRCodeScanner: View {
     @State private var qrOutput: AVCaptureMetadataOutput = .init()
 
     /// Camera QR Output delegate
-    @Backport.StateObject private var qrDelegate = QRScannerDelegate()
+    @StateObject private var qrDelegate = QRScannerDelegate()
 
     /// Scanned code
     @State private var scannedCode: String = ""
@@ -152,16 +151,13 @@ public struct QRCodeScanner: View {
                                     )
                                 .rotationEffect(.init(degrees: rotation))
                         }
-                    }
-                    .frame(width: size.width * 0.6, height: size.width * 0.6)
-
-                    /// Scanner Animation
-                    .backport.overlay {
+                        /// Scanner Animation
                         Rectangle()
                             .fill(readerColor)
                             .frame(height: 2.5)
                             .offset(y: isScanning ? (size.width * 0.59)/2 : -(size.width * 0.59)/2)
                     }
+                    .frame(width: size.width * 0.6, height: size.width * 0.6)
 
                 }
                 /// Square Shape
@@ -210,7 +206,7 @@ public struct QRCodeScanner: View {
             session.stopRunning()
         }
         
-        .backport.onChange(of: qrDelegate.scannedCode) { newValue in
+        .onChange(of: qrDelegate.scannedCode) { newValue in
             if let code = newValue {
                 scannedCode = code
 
