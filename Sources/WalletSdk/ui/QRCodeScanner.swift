@@ -20,17 +20,16 @@ public class QRScannerDelegate: NSObject, ObservableObject, AVCaptureMetadataOut
 
 /// Camera View Using AVCaptureVideoPreviewLayer
 public struct CameraView: UIViewRepresentable {
-    
+
     var frameSize: CGSize
-    
+
     /// Camera Session
     @Binding var session: AVCaptureSession
-    
+
     public init(frameSize: CGSize, session: Binding<AVCaptureSession>) {
         self.frameSize = frameSize
         self._session = session
     }
-
 
     public func makeUIView(context: Context) -> UIView {
         /// Defining camera frame size
@@ -58,7 +57,6 @@ extension UIScreen {
    static let screenSize = UIScreen.main.bounds.size
 }
 
-
 public struct QRCodeScanner: View {
     /// QR Code Scanner properties
     @State private var isScanning: Bool = false
@@ -85,7 +83,7 @@ public struct QRCodeScanner: View {
     var readerColor: Color
     var textColor: Color
     var backgroundOpacity: Double
-    
+
     public init(
         title: String = "Scan QR Code",
         subtitle: String = "Please align within the guides",
@@ -113,9 +111,9 @@ public struct QRCodeScanner: View {
         self.textColor = textColor
         self.backgroundOpacity = backgroundOpacity
     }
-    
+
     public var body: some View {
-        
+
         ZStack {
             GeometryReader {
                 let viewSize = $0.size
@@ -163,7 +161,6 @@ public struct QRCodeScanner: View {
                 /// Square Shape
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            
 
             VStack(alignment: .leading) {
                 Text(title)
@@ -201,11 +198,11 @@ public struct QRCodeScanner: View {
                 }
             }
         })
-        
+
         .onDisappear {
             session.stopRunning()
         }
-        
+
         .onChange(of: qrDelegate.scannedCode) { newValue in
             if let code = newValue {
                 scannedCode = code
@@ -222,7 +219,7 @@ public struct QRCodeScanner: View {
             }
 
         }
-        
+
     }
 
     func reactivateCamera() {
