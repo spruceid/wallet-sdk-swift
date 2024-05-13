@@ -16,14 +16,16 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/spruceid/wallet-sdk-rs.git", from: "0.0.25"),
         // .package(path: "../wallet-sdk-rs"),
-        .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.0")
+        .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.0"),
+        .package(url: "https://github.com/shaps80/SwiftUIBackports.git", from: "2.0.0")
     ],
     targets: [
         .target(
             name: "SpruceIDWalletSdk",
             dependencies: [
                 .product(name: "SpruceIDWalletSdkRs", package: "wallet-sdk-rs"),
-                .product(name: "Algorithms", package: "swift-algorithms")
+                .product(name: "Algorithms", package: "swift-algorithms"),
+                .product(name: "SwiftUIBackports", package: "SwiftUIBackports")
             ]
         ),
         .testTarget(

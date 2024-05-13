@@ -3,7 +3,7 @@ import CryptoKit
 import Foundation
 import SpruceIDWalletSdkRs
 
-public typealias Namespace = String
+public typealias MDocNamespace = String
 public typealias IssuerSignedItemBytes = Data
 public typealias ItemsRequest = SpruceIDWalletSdkRs.ItemsRequest
 
@@ -15,7 +15,7 @@ public class MDoc: Credential {
     /// namespaces is the full set of namespaces with data items and their value
     /// IssuerSignedItemBytes will be bytes, but its composition is defined here
     /// https://github.com/spruceid/isomdl/blob/f7b05dfa/src/definitions/issuer_signed.rs#L18
-    public init?(fromMDoc issuerAuth: Data, namespaces: [Namespace: [IssuerSignedItemBytes]], keyAlias: String) {
+    public init?(fromMDoc issuerAuth: Data, namespaces: [MDocNamespace: [IssuerSignedItemBytes]], keyAlias: String) {
         self.keyAlias = keyAlias
         do {
             try self.inner = SpruceIDWalletSdkRs.MDoc.fromCbor(value: issuerAuth)

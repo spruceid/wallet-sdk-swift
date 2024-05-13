@@ -19,12 +19,30 @@
       }
     },
     {
+      "identity" : "swiftbackports",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/shaps80/SwiftBackports",
+      "state" : {
+        "revision" : "ddca6a237c1ba2291d5a3cc47ec8480ce6e9f805",
+        "version" : "1.0.3"
+      }
+    },
+    {
+      "identity" : "swiftuibackports",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/shaps80/SwiftUIBackports.git",
+      "state" : {
+        "revision" : "f5f23b016eeda6642a0fe1020241af19c9c05556",
+        "version" : "2.8.1"
+      }
+    },
+    {
       "identity" : "wallet-sdk-rs",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/spruceid/wallet-sdk-rs.git",
       "state" : {
-        "revision" : "56cd08960dd7ebabcaee435b5f15c8173e40fa1b",
-        "version" : "0.0.4"
+        "revision" : "d508f610c05a309a3254678d99c17804f04ec1fa",
+        "version" : "0.0.25"
       }
     }
   ],
