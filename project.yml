@@ -12,6 +12,9 @@ packages:
   SwiftLint:
     url: https://github.com/realm/SwiftLint
     from: 0.54.0
+  SwiftUIBackports:
+    url: https://github.com/shaps80/SwiftUIBackports.git
+    from: 2.0.0
 settings:
   ENABLE_USER_SCRIPT_SANDBOXING: YES
   GENERATE_INFOPLIST_FILE: YES
@@ -24,6 +27,7 @@ targets:
     sources:
       - Sources
     dependencies:
+      - package: SwiftUIBackports
       - package: SpruceIDWalletSdkRs
       - package: SwiftAlgorithms
         product: Algorithms
