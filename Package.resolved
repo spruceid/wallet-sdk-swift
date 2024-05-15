@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/spruceid/wallet-sdk-rs.git",
       "state" : {
-        "revision" : "56cd08960dd7ebabcaee435b5f15c8173e40fa1b",
-        "version" : "0.0.4"
+        "revision" : "d508f610c05a309a3254678d99c17804f04ec1fa",
+        "version" : "0.0.25"
       }
     }
   ],
