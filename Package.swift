@@ -6,7 +6,8 @@ import PackageDescription
 let package = Package(
     name: "SpruceIDWalletSdk",
     platforms: [
-        .iOS(.v14)
+        .iOS(.v13),
+        .macOS(.v10_15)
     ],
     products: [
         .library(
