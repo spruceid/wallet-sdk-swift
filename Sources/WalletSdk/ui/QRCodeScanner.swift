@@ -57,6 +57,7 @@ extension UIScreen {
    static let screenSize = UIScreen.main.bounds.size
 }
 
+@available(iOS 14.0, *)
 public struct QRCodeScanner: View {
     /// QR Code Scanner properties
     @State private var isScanning: Bool = false

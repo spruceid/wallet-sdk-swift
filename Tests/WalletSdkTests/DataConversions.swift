@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import CADMVWalletSdk
+@testable import SpruceIDWalletSdk
 
 final class DataConversions: XCTestCase {
  
