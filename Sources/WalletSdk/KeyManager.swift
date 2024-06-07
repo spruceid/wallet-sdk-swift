@@ -8,7 +8,7 @@ public class KeyManager: NSObject {
      */
     static func reset() -> Bool {
         let query: [String: Any] = [
-            kSecClass as String: kSecClassKey,
+            kSecClass as String: kSecClassKey
         ]
 
         let ret = SecItemDelete(query as CFDictionary)
@@ -80,7 +80,7 @@ public class KeyManager: NSObject {
 
         var error: Unmanaged<CFError>?
         SecKeyCreateRandomKey(attributes as CFDictionary, &error)
-      if (error != nil) { print(error!) }
+      if error != nil { print(error!) }
         return error == nil
     }
 
@@ -170,7 +170,7 @@ public class KeyManager: NSObject {
 
         var error: Unmanaged<CFError>?
         SecKeyCreateRandomKey(attributes as CFDictionary, &error)
-        if (error != nil) { print(error ?? "no error") }
+        if error != nil { print(error ?? "no error") }
         return error == nil
     }
 
