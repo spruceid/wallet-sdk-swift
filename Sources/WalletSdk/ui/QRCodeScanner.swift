@@ -5,16 +5,16 @@ import os.log
 var isAuthorized: Bool {
     get async {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
-      
+
         // Determine if the user previously authorized camera access.
         var isAuthorized = status == .authorized
-        
+
         // If the system hasn't determined the user's authorization status,
         // explicitly prompt them for approval.
         if status == .notDetermined {
             isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
         }
-        
+
         return isAuthorized
     }
 }
@@ -201,7 +201,7 @@ public struct QRCodeScanner: View {
         .onAppear(perform: {
             Task {
                 guard await isAuthorized else { return }
-                
+
                 switch AVCaptureDevice.authorizationStatus(for: .video) {
                 case .authorized:
                     if session.inputs.isEmpty {
