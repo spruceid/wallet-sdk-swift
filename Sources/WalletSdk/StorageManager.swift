@@ -1,7 +1,5 @@
 // File: Storage Manager
 //
-// $LICENSE_BLOCK
-//
 //    Store and retrieve sensitive data.  Data is stored in the Application Support directory of the app, encrypted in place
 // via the .completeFileProtection option, and marked as excluded from backups so it will not be included in iCloud backps.
 
@@ -28,7 +26,7 @@ class StorageManager: NSObject
    //    file - the name of the file
    //
    // Returns:
-   //    An URL for the named file in the app's Application Support directory. 
+   //    An URL for the named file in the app's Application Support directory.
 
    private func path(file: String) -> URL?
    {
@@ -74,7 +72,7 @@ class StorageManager: NSObject
          print("Failed to write the data for '\(key)'.")
          return false
       }
- 
+
       return true
    }
 
@@ -93,8 +91,8 @@ class StorageManager: NSObject
 
       do
       {
-         let d = try Data(contentsOf: file);
-         return d;
+         let d = try Data(contentsOf: file)
+         return d
       }
       catch
       {
