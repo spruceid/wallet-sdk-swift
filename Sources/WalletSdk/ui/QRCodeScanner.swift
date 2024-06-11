@@ -2,6 +2,23 @@ import SwiftUI
 import AVKit
 import os.log
 
+var isAuthorized: Bool {
+    get async {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+
+        // Determine if the user previously authorized camera access.
+        var isAuthorized = status == .authorized
+
+        // If the system hasn't determined the user's authorization status,
+        // explicitly prompt them for approval.
+        if status == .notDetermined {
+            isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
+        }
+
+        return isAuthorized
+    }
+}
+
 public class QRScannerDelegate: NSObject, ObservableObject, AVCaptureMetadataOutputObjectsDelegate {
 
     @Published public var scannedCode: String?
@@ -113,8 +130,7 @@ public struct QRCodeScanner: View {
     }
 
     public var body: some View {
-
-        ZStack {
+        ZStack(alignment: .top) {
             GeometryReader {
                 let viewSize = $0.size
                 let size = UIScreen.screenSize
@@ -181,10 +197,11 @@ public struct QRCodeScanner: View {
             }
             .padding(.vertical, 80)
         }
-
         /// Checking camera permission, when the view is visible
         .onAppear(perform: {
             Task {
+                guard await isAuthorized else { return }
+
                 switch AVCaptureDevice.authorizationStatus(for: .video) {
                 case .authorized:
                     if session.inputs.isEmpty {

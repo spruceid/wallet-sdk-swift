@@ -16,6 +16,8 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>NSCameraUsageDescription</key>
+	<string>QR Code Scanner</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Secure transmission of mobile DL data</string>
 </dict>
