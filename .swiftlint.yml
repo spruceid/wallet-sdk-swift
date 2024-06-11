@@ -1,5 +1,6 @@
 excluded:
   - .build
 disabled_rules:
+  - colon
   - cyclomatic_complexity
   - todo
