@@ -2,6 +2,26 @@ import SwiftUI
 import AVKit
 import os.log
 
+
+var isAuthorized: Bool {
+    get async {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        
+        // Determine if the user previously authorized camera access.
+        var isAuthorized = status == .authorized
+        
+        // If the system hasn't determined the user's authorization status,
+        // explicitly prompt them for approval.
+        if status == .notDetermined {
+            isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
+        }
+      
+        print("Requesting permission")
+        
+        return isAuthorized
+    }
+}
+
 public class QRScannerDelegate: NSObject, ObservableObject, AVCaptureMetadataOutputObjectsDelegate {
 
     @Published public var scannedCode: String?
@@ -189,7 +209,7 @@ public struct QRCodeScanner: View {
                 case .authorized:
                     if session.inputs.isEmpty {
                         /// New setup
-                        setupCamera()
+                      await setupCamera()
                     } else {
                         /// Already existing one
                         reactivateCamera()
@@ -245,8 +265,10 @@ public struct QRCodeScanner: View {
     }
 
     /// Setting up camera
-    public func setupCamera() {
+    func setupCamera() async {
         do {
+            guard await isAuthorized else { return }
+          
             /// Finding back camera
             guard let device = AVCaptureDevice.DiscoverySession(
                     deviceTypes: [.builtInUltraWideCamera, .builtInWideAngleCamera],
