@@ -6,6 +6,8 @@ import os.log
 var isAuthorized: Bool {
     get async {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
+      
+        print("Requesting permission")
         
         // Determine if the user previously authorized camera access.
         var isAuthorized = status == .authorized
@@ -16,7 +18,7 @@ var isAuthorized: Bool {
             isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
         }
       
-        print("Requesting permission")
+        print("After permission request")
         
         return isAuthorized
     }
