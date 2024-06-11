@@ -1,7 +1,7 @@
 // File: PlatformContext
 //
-//    Store and retrieve sensitive data.  Data is stored in the Application Support directory of the app, encrypted in place
-// via the .completeFileProtection option, and marked as excluded from backups so it will not be included in iCloud backps.
+//    The platform context contains platform-specific implementation of
+// subsystems like the secure storage manager or the logger.
 
 //
 // Imports
@@ -17,8 +17,9 @@ import Foundation
 //    A container for platform-specific subsystems.
 
 class SpruceKitPlatformContext: NSObject {
-   let keyMgr     = KeyManager()     // Keys
-   let storageMgr = StorageManager() // Secure storage.
+   let keyMgr     = KeyManager()      // Keys.
+   let logger     = SpruceKitLogger() // Logging.
+   let storageMgr = StorageManager()  // Secure storage.
 }
 
 //
