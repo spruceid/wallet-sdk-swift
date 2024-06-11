@@ -30,7 +30,7 @@ class StorageManager: NSObject
    // Returns:
    //    An URL for the named file in the app's Application Support directory. 
 
-   private func path(_ file: String) -> URL?
+   private func path(file: String) -> URL?
    {
       do
       {
@@ -61,9 +61,9 @@ class StorageManager: NSObject
    // Returns:
    //    A boolean indicating success.
 
-   func add(_ key: String, _ value: Data) -> Bool
+   func add(key: String, value: Data) -> Bool
    {
-      guard let file = path(key) else { return false }
+      guard let file = path(file: key) else { return false }
 
       do
       {
@@ -87,9 +87,9 @@ class StorageManager: NSObject
    // Returns:
    //    Optional data potentially containing the value associated with the key; may be `nil`.
 
-   func get(_ key: String) -> Data?
+   func get(key: String) -> Data?
    {
-      guard let file = path(key) else { return nil }
+      guard let file = path(file: key) else { return nil }
 
       do
       {
@@ -113,9 +113,9 @@ class StorageManager: NSObject
    // Returns:
    //    A boolean indicating success; at present, there is no failure path, but this may change in the future.
 
-   func remove(_ key: String) -> Bool
+   func remove(key: String) -> Bool
    {
-      guard let file = path(key) else { return true }
+      guard let file = path(file: key) else { return true }
 
       do
       {
@@ -142,13 +142,13 @@ class StorageManager: NSObject
          return
       }
 
-      if !add(key, value)
+      if !add(key: key, value: value)
       {
          print("\(self.classForCoder):\(#function): Failed add() key/value pair.")
          return
       }
 
-      guard let payload = get(key) else
+      guard let payload = get(key: key) else
       {
          print("\(self.classForCoder):\(#function): Failed get() value for key.")
          return
@@ -160,7 +160,7 @@ class StorageManager: NSObject
          return
       }
 
-      if !remove(key)
+      if !remove(key: key)
       {
          print("\(self.classForCoder):\(#function): Failed to delete key/value pair.")
          return
