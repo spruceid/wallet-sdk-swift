@@ -114,12 +114,8 @@ class StorageManager: NSObject {
    //    Check to see if everything works.
 
    func sys_test() {
-      let key = "test_key"
-
-      guard let value = Data("Some random string of text. 😎".utf8) else {
-         print("\(self.classForCoder):\(#function): Failed to encode value.")
-         return
-      }
+      let key   = "test_key"
+      let value = Data("Some random string of text. 😎".utf8)
 
       if !add(key: key, value: value) {
          print("\(self.classForCoder):\(#function): Failed add() key/value pair.")
