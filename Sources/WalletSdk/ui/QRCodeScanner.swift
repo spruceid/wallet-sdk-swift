@@ -206,7 +206,7 @@ public struct QRCodeScanner: View {
                 case .authorized:
                     if session.inputs.isEmpty {
                         /// New setup
-                      await setupCamera()
+                        setupCamera()
                     } else {
                         /// Already existing one
                         reactivateCamera()
@@ -262,7 +262,7 @@ public struct QRCodeScanner: View {
     }
 
     /// Setting up camera
-    func setupCamera() async {
+    func setupCamera() {
         do {
             /// Finding back camera
             guard let device = AVCaptureDevice.DiscoverySession(
