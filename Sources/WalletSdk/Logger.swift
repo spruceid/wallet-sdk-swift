@@ -29,7 +29,7 @@ class SpruceKitLogger: NSObject {
       case error
    }
 
-   var verbosity = .trace
+   var verbosity = Verbosity.trace
 
    // Local Method: logRaw()
    //    The core logging interface; all log statements pass through this, so
@@ -59,7 +59,7 @@ class SpruceKitLogger: NSObject {
    //    text - the text to log
 
    func logTrace(text: String) {
-      logRaw(verb: .trace, prefix: "Tr", text: text)
+      logRaw(verb: Verbosity.trace, prefix: "Tr", text: text)
    }
 
    // Method: logInfo()
@@ -69,7 +69,7 @@ class SpruceKitLogger: NSObject {
    //    text - the text to log
 
    func logInfo(text: String) {
-      logRaw(verb: .info, prefix: "In", text: text)
+      logRaw(verb: Verbosity.info, prefix: "In", text: text)
    }
 
    // Method: logWarn()
@@ -79,7 +79,7 @@ class SpruceKitLogger: NSObject {
    //    text - the text to log
 
    func logWarn(text: String) {
-      logRaw(verb: .warn, prefix: "W?", text: text)
+      logRaw(verb: Verbosity.warn, prefix: "W?", text: text)
    }
 
    // Method: logError()
@@ -89,7 +89,7 @@ class SpruceKitLogger: NSObject {
    //    text - the text to log
 
    func logError(text: String) {
-      logRaw(verb: .error, prefix: "E!", text: text)
+      logRaw(verb: Verbosity.error, prefix: "E!", text: text)
    }
 }
 
