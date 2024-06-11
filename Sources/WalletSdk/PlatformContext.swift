@@ -16,8 +16,7 @@ import Foundation
 // Class: SpruceKitPlatformContext
 //    A container for platform-specific subsystems.
 
-class SpruceKitPlatformContext: NSObject
-{
+class SpruceKitPlatformContext: NSObject {
    let storageMgr = StorageManager() // Secure storage.
 }
 

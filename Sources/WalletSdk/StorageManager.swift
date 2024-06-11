@@ -116,7 +116,7 @@ class StorageManager: NSObject {
    func sys_test() {
       let key = "test_key"
 
-      guard let value = "Some random string of text. 😎".data(using: .utf8) else {
+      guard let value = Data("Some random string of text. 😎".utf8) else {
          print("\(self.classForCoder):\(#function): Failed to encode value.")
          return
       }
