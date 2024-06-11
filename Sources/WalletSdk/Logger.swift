@@ -22,7 +22,12 @@ class SpruceKitLogger: NSObject {
 
    // Verbosity
 
-   enum Verbosity: Int { trace, info, warn, error }
+   enum Verbosity: Int {
+      case trace
+      case info
+      case warn
+      case error
+   }
 
    var verbosity = .trace
 
