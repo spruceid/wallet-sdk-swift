@@ -245,7 +245,7 @@ public struct QRCodeScanner: View {
     }
 
     /// Setting up camera
-    func setupCamera() {
+    public func setupCamera() {
         do {
             /// Finding back camera
             guard let device = AVCaptureDevice.DiscoverySession(

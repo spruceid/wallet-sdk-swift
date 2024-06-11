@@ -6,7 +6,7 @@ public class KeyManager: NSObject {
     /**
      * Resets the key store by removing all of the keys.
      */
-    static func reset() -> Bool {
+    public static func reset() -> Bool {
         let query: [String: Any] = [
             kSecClass as String: kSecClassKey
         ]
@@ -18,7 +18,7 @@ public class KeyManager: NSObject {
     /**
      * Checks to see if a secret key exists based on the id/alias.
      */
-    static func keyExists(id: String) -> Bool {
+    public static func keyExists(id: String) -> Bool {
         let tag = id.data(using: .utf8)!
         let query: [String: Any] = [
             kSecClass as String: kSecClassKey,
@@ -35,7 +35,7 @@ public class KeyManager: NSObject {
     /**
      * Returns a secret key - based on the id of the key.
      */
-    static func getSecretKey(id: String) -> SecKey? {
+    public static func getSecretKey(id: String) -> SecKey? {
       let tag = id.data(using: .utf8)!
       let query: [String: Any] = [
           kSecClass as String: kSecClassKey,
@@ -57,7 +57,7 @@ public class KeyManager: NSObject {
     /**
      * Generates a secp256r1 signing key by id
      */
-    static func generateSigningKey(id: String) -> Bool {
+    public static func generateSigningKey(id: String) -> Bool {
         let tag = id.data(using: .utf8)!
 
         let access = SecAccessControlCreateWithFlags(
@@ -87,7 +87,7 @@ public class KeyManager: NSObject {
     /**
      * Returns a JWK for a particular secret key by key id.
      */
-    static func getJwk(id: String) -> String? {
+    public static func getJwk(id: String) -> String? {
       guard let key = getSecretKey(id: id) else { return nil }
 
       guard let publicKey = SecKeyCopyPublicKey(key) else {
@@ -122,7 +122,7 @@ public class KeyManager: NSObject {
     /**
      * Signs the provided payload with a ecdsaSignatureMessageX962SHA256 private key.
      */
-    static func signPayload(id: String, payload: [UInt8]) -> [UInt8]? {
+    public static func signPayload(id: String, payload: [UInt8]) -> [UInt8]? {
         guard let key = getSecretKey(id: id) else { return nil }
 
         guard let data = CFDataCreate(kCFAllocatorDefault, payload, payload.count) else {
@@ -147,7 +147,7 @@ public class KeyManager: NSObject {
     /**
      * Generates an encryption key with a provided id in the Secure Enclave.
      */
-    static func generateEncryptionKey(id: String) -> Bool {
+    public static func generateEncryptionKey(id: String) -> Bool {
         let tag = id.data(using: .utf8)!
 
         let access = SecAccessControlCreateWithFlags(
@@ -177,7 +177,7 @@ public class KeyManager: NSObject {
     /**
      * Encrypts payload by a key referenced by key id.
      */
-    static func encryptPayload(id: String, payload: [UInt8]) -> ([UInt8], [UInt8])? {
+    public static func encryptPayload(id: String, payload: [UInt8]) -> ([UInt8], [UInt8])? {
         guard let key = getSecretKey(id: id) else { return nil }
 
         guard let publicKey = SecKeyCopyPublicKey(key) else {
@@ -206,7 +206,7 @@ public class KeyManager: NSObject {
     /**
      * Decrypts the provided payload by a key id and initialization vector.
      */
-    static func decryptPayload(id: String, iv: [UInt8], payload: [UInt8]) -> [UInt8]? {
+    public static func decryptPayload(id: String, iv: [UInt8], payload: [UInt8]) -> [UInt8]? {
         guard let key = getSecretKey(id: id) else { return nil }
 
         guard let data = CFDataCreate(kCFAllocatorDefault, payload, payload.count) else {
