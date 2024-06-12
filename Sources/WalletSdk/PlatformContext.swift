@@ -6,7 +6,6 @@
 import Foundation
 
 /// A container for platform-specific subsystems.
-
 class SpruceKitPlatformContext: NSObject {
    let keyMgr     = KeyManager()
    let logger     = SpruceKitLogger()

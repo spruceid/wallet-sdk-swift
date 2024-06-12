@@ -6,7 +6,6 @@
 import Foundation
 
 /// Store and retrieve sensitive data.
-
 class StorageManager: NSObject {
 
    /// Get the path to the application support dir, appending the given file name to it.  We use the application support
@@ -17,7 +16,6 @@ class StorageManager: NSObject {
    ///
    /// - Returns:
    ///    - An URL for the named file in the app's Application Support directory.
-
    private func path(file: String) -> URL? {
       do {
          //    Get the applications support dir, and tack the name of the thing we're storing on the end of it.  This does
@@ -43,7 +41,6 @@ class StorageManager: NSObject {
    ///
    /// - Returns:
    ///    - A boolean indicating success.
-
    func add(key: String, value: Data) -> Bool {
       guard let file = path(file: key) else { return false }
 
@@ -64,7 +61,6 @@ class StorageManager: NSObject {
    ///
    /// - Returns:
    ///    Optional data potentially containing the value associated with the key; may be `nil`.
-
    func get(key: String) -> Data? {
       guard let file = path(file: key) else { return nil }
 
@@ -85,7 +81,6 @@ class StorageManager: NSObject {
    ///
    /// - Returns:
    ///    - A boolean indicating success; at present, there is no failure path, but this may change in the future.
-
    func remove(key: String) -> Bool {
       guard let file = path(file: key) else { return true }
 
@@ -99,7 +94,6 @@ class StorageManager: NSObject {
    }
 
    /// Check to see if everything works.
-
    func sys_test() {
       let key   = "test_key"
       let value = Data("Some random string of text. 😎".utf8)

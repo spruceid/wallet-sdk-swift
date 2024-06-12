@@ -5,7 +5,6 @@
 import Foundation
 
 /// A logging system for debug purposes.
-
 class SpruceKitLogger: NSObject {
    // Make this a singleton.
 
@@ -33,7 +32,6 @@ class SpruceKitLogger: NSObject {
    ///    - verb:    verbosity for the log
    ///    - prefix:  string to prefix on the log line
    ///    - text:    the text to be logged
-
    private func logRaw(verb:   Verbosity,
                        prefix: String,
                        text:   String) {
@@ -46,7 +44,6 @@ class SpruceKitLogger: NSObject {
    ///
    /// - Parameters:
    ///    - text: the text to log
-
    func logTrace(text: String) {
       logRaw(verb: Verbosity.trace, prefix: "Tr", text: text)
    }
@@ -55,7 +52,6 @@ class SpruceKitLogger: NSObject {
    ///
    /// - Parameters:
    ///    - text: the text to log
-
    func logInfo(text: String) {
       logRaw(verb: Verbosity.info, prefix: "In", text: text)
    }
@@ -64,7 +60,6 @@ class SpruceKitLogger: NSObject {
    ///
    /// - Parameters:
    ///    - text: the text to log
-
    func logWarn(text: String) {
       logRaw(verb: Verbosity.warn, prefix: "W?", text: text)
    }
@@ -73,7 +68,6 @@ class SpruceKitLogger: NSObject {
    ///
    /// - Parameters:
    ///    - text: the text to log
-
    func logError(text: String) {
       logRaw(verb: Verbosity.error, prefix: "E!", text: text)
    }
