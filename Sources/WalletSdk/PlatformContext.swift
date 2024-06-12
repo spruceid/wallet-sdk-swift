@@ -12,5 +12,3 @@ class SpruceKitPlatformContext: NSObject {
    let logger     = SpruceKitLogger()
    let storageMgr = StorageManager()
 }
-
-// Copyright © 2024, Spruce Systems, Inc.

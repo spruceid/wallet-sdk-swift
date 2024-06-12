@@ -78,5 +78,3 @@ class SpruceKitLogger: NSObject {
       logRaw(verb: Verbosity.error, prefix: "E!", text: text)
    }
 }
-
-// Copyright © 2024, Spruce Systems, Inc.

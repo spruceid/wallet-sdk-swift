@@ -127,5 +127,3 @@ class StorageManager: NSObject {
       print("\(self.classForCoder):\(#function): Completed successfully.")
    }
 }
-
-// Copyright © 2024, Spruce Systems, Inc.
