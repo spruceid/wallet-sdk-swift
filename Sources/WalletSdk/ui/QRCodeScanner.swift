@@ -266,7 +266,7 @@ public struct QRCodeScanner: View {
         do {
             /// Finding back camera
             guard let device = AVCaptureDevice.DiscoverySession(
-                    deviceTypes: [.builtInUltraWideCamera, .builtInWideAngleCamera],
+                    deviceTypes: [.builtInWideAngleCamera],
                     mediaType: .video, position: .back)
                 .devices.first
             else {
