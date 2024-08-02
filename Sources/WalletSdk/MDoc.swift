@@ -1,14 +1,14 @@
 import CoreBluetooth
 import CryptoKit
 import Foundation
-import SpruceIDWalletSdkRs
+import SpruceIDMobileSdkRs
 
 public typealias MDocNamespace = String
 public typealias IssuerSignedItemBytes = Data
-public typealias ItemsRequest = SpruceIDWalletSdkRs.ItemsRequest
+public typealias ItemsRequest = SpruceIDMobileSdkRs.ItemsRequest
 
 public class MDoc: Credential {
-    var inner: SpruceIDWalletSdkRs.MDoc
+    var inner: SpruceIDMobileSdkRs.MDoc
     var keyAlias: String
 
     /// issuerAuth is the signed MSO (i.e. CoseSign1 with MSO as payload)
@@ -18,7 +18,7 @@ public class MDoc: Credential {
     public init?(fromMDoc issuerAuth: Data, namespaces: [MDocNamespace: [IssuerSignedItemBytes]], keyAlias: String) {
         self.keyAlias = keyAlias
         do {
-            try self.inner = SpruceIDWalletSdkRs.MDoc.fromCbor(value: issuerAuth)
+            try self.inner = SpruceIDMobileSdkRs.MDoc.fromCbor(value: issuerAuth)
         } catch {
             print("\(error)")
             return nil
@@ -49,7 +49,7 @@ public class BLESessionManager {
         self.uuid = UUID()
         self.mdoc = mdoc
         do {
-            let sessionData = try SpruceIDWalletSdkRs.initialiseSession(document: mdoc.inner,
+            let sessionData = try SpruceIDMobileSdkRs.initialiseSession(document: mdoc.inner,
                                                                         uuid: self.uuid.uuidString)
             self.state = sessionData.state
             bleManager = MDocHolderBLECentral(callback: self, serviceUuid: CBUUID(nsuuid: self.uuid))
@@ -67,7 +67,7 @@ public class BLESessionManager {
 
     public func submitNamespaces(items: [String: [String: [String]]]) {
         do {
-            let payload = try SpruceIDWalletSdkRs.submitResponse(sessionManager: sessionManager!,
+            let payload = try SpruceIDMobileSdkRs.submitResponse(sessionManager: sessionManager!,
                                                                  permittedItems: items)
             let query = [kSecClass: kSecClassKey,
           kSecAttrApplicationLabel: self.mdoc.keyAlias,
@@ -99,7 +99,7 @@ public class BLESessionManager {
                 self.cancel()
                 return
             }
-            let response = try SpruceIDWalletSdkRs.submitSignature(sessionManager: sessionManager!,
+            let response = try SpruceIDMobileSdkRs.submitSignature(sessionManager: sessionManager!,
                                                                      derSignature: derSignature)
             self.bleManager.writeOutgoingValue(data: response)
         } catch {
@@ -120,7 +120,7 @@ extension BLESessionManager: MDocBLEDelegate {
             self.callback.update(state: .uploadProgress(value, total))
         case .message(let data):
             do {
-                let requestData = try SpruceIDWalletSdkRs.handleRequest(state: self.state, request: data)
+                let requestData = try SpruceIDMobileSdkRs.handleRequest(state: self.state, request: data)
                 self.sessionManager = requestData.sessionManager
                 self.callback.update(state: .selectNamespaces(requestData.itemsRequests))
             } catch {
