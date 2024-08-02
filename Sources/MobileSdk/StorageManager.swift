@@ -89,6 +89,23 @@ class StorageManager: NSObject {
       return nil
    }
 
+   // Method: list()
+   //    List the the items in storage.  Note that this will list all items in the `application support` directory,
+   // potentially including any files created by other systems.
+   //
+   // Returns:
+   //    A list of items in storage.
+
+   func list() -> [String] {
+      guard let asdir = path(file: "")?.path else { return [String]() }
+
+      do {
+         return try FileManager.default.contentsOfDirectory(atPath: asdir)
+      } catch {
+         return [String]()
+      }
+   }
+
    // Method: remove()
    //    Remove a key/value pair. Removing a nonexistent key/value pair is not an error.
    //
@@ -127,12 +144,25 @@ class StorageManager: NSObject {
          return
       }
 
+      if !add(key: "test_key_2", value: value) {
+         print("\(self.classForCoder):\(#function): Failed add() second key/value pair.")
+      }
+
+      let dir = list()
+
+      print("dir: \(dir)")
+
       if !(payload == value) {
          print("\(self.classForCoder):\(#function): Mismatch between stored & retrieved value.")
          return
       }
 
       if !remove(key: key) {
+         print("\(self.classForCoder):\(#function): Failed to delete key/value pair.")
+         return
+      }
+
+      if !remove(key: "test_key_2") {
          print("\(self.classForCoder):\(#function): Failed to delete key/value pair.")
          return
       }
