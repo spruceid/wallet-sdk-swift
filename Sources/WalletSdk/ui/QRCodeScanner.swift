@@ -288,7 +288,7 @@ public struct QRCodeScanner: View {
             session.addInput(input)
             session.addOutput(qrOutput)
             /// Setting output config to read qr codes
-            qrOutput.metadataObjectTypes = [.qr]
+            qrOutput.metadataObjectTypes = [.qr, .pdf417]
             /// Adding delegate to retreive the fetched qr code from camera
             qrOutput.setMetadataObjectsDelegate(qrDelegate, queue: .main)
             session.commitConfiguration()
