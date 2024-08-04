@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import SpruceIDMobileSdkRs
 
 //    The following is a stripped-down version of the protocol definition from mobile-sdk-rs against which the storage
 // manager is intended to link.
