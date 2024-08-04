@@ -9,6 +9,21 @@
 
 import Foundation
 
+//    The following is a stripped-down version of the protocol definition from mobile-sdk-rs against which the storage
+// manager is intended to link.
+
+/*
+public typealias Key = String
+public typealias Value = Data
+ 
+public protocol StorageManagerInterface : AnyObject {
+    func add(key: Key, value: Value) throws 
+    func get(key: Key) throws  -> Value
+    func list()  -> [Key]
+    func remove(key: Key) throws 
+}
+*/
+
 //
 // Code
 //
@@ -16,7 +31,7 @@ import Foundation
 // Class: StorageManager
 //    Store and retrieve sensitive data.
 
-class StorageManager: NSObject {
+class StorageManager: NSObject, StorageManagerInterface {
    // Local-Method: path()
    //    Get the path to the application support dir, appending the given file name to it.  We use the application support
    // directory because its contents are not shared.
@@ -54,17 +69,15 @@ class StorageManager: NSObject {
    // Returns:
    //    A boolean indicating success.
 
-   func add(key: String, value: Data) -> Bool {
-      guard let file = path(file: key) else { return false }
+   func add(key: Key, value: Value) throws {
+      guard let file = path(file: key) else { return }
 
       do {
          try value.write(to: file, options: .completeFileProtection)
       } catch {
          print("Failed to write the data for '\(key)'.")
-         return false
+         return
       }
-
-      return true
    }
 
    // Method: get()
@@ -76,8 +89,8 @@ class StorageManager: NSObject {
    // Returns:
    //    Optional data potentially containing the value associated with the key; may be `nil`.
 
-   func get(key: String) -> Data? {
-      guard let file = path(file: key) else { return nil }
+   func get(key: Key) throws -> Value {
+      guard let file = path(file: key) else { return Data() }
 
       do {
          let d = try Data(contentsOf: file)
@@ -86,7 +99,7 @@ class StorageManager: NSObject {
          print("Failed to read '\(file)'.")
       }
 
-      return nil
+      return Data()
    }
 
    // Method: list()
@@ -96,7 +109,7 @@ class StorageManager: NSObject {
    // Returns:
    //    A list of items in storage.
 
-   func list() -> [String] {
+   func list() -> [Key] {
       guard let asdir = path(file: "")?.path else { return [String]() }
 
       do {
@@ -115,60 +128,60 @@ class StorageManager: NSObject {
    // Returns:
    //    A boolean indicating success; at present, there is no failure path, but this may change in the future.
 
-   func remove(key: String) -> Bool {
-      guard let file = path(file: key) else { return true }
+   func remove(key: Key) throws {
+      guard let file = path(file: key) else { return }
 
       do {
          try FileManager.default.removeItem(at: file)
       } catch {
          // It's fine if the file isn't there.
       }
-
-      return true
    }
 
    // Method: sys_test()
    //    Check to see if everything works.
 
+/*
    func sys_test() {
       let key   = "test_key"
       let value = Data("Some random string of text. 😎".utf8)
 
-      if !add(key: key, value: value) {
-         print("\(self.classForCoder):\(#function): Failed add() key/value pair.")
+      do {
+         try add(key: key, value: value)
+      } catch {
+         print("\(self.classForCoder):\(#function): Failed add() value for key.")
          return
       }
 
-      guard let payload = get(key: key) else {
+      let keys = list();
+
+      print("Keys:")
+      for k in keys {
+         print("  \(k)")
+      }
+
+      do {
+         let payload = try get(key: key)
+
+         if !(payload == value) {
+            print("\(self.classForCoder):\(#function): Mismatch between stored & retrieved value.")
+            return
+         }
+      } catch {
          print("\(self.classForCoder):\(#function): Failed get() value for key.")
          return
       }
 
-      if !add(key: "test_key_2", value: value) {
-         print("\(self.classForCoder):\(#function): Failed add() second key/value pair.")
-      }
-
-      let dir = list()
-
-      print("dir: \(dir)")
-
-      if !(payload == value) {
-         print("\(self.classForCoder):\(#function): Mismatch between stored & retrieved value.")
-         return
-      }
-
-      if !remove(key: key) {
-         print("\(self.classForCoder):\(#function): Failed to delete key/value pair.")
-         return
-      }
-
-      if !remove(key: "test_key_2") {
-         print("\(self.classForCoder):\(#function): Failed to delete key/value pair.")
+      do {
+         try remove(key: key)
+      } catch {
+         print("\(self.classForCoder):\(#function): Failed remove() value for key.")
          return
       }
 
       print("\(self.classForCoder):\(#function): Completed successfully.")
    }
+*/
 }
 
 //
