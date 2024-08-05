@@ -6,21 +6,6 @@
 import Foundation
 import SpruceIDMobileSdkRs
 
-//    The following is a stripped-down version of the protocol definition from mobile-sdk-rs against which the storage
-// manager is intended to link.
-
-/*
- public typealias Key = String
- public typealias Value = Data
-
- public protocol StorageManagerInterface : AnyObject {
-     func add(key: Key, value: Value) throws
-     func get(key: Key) throws  -> Value
-     func list()  -> [Key]
-     func remove(key: Key) throws
- }
- */
-
 /// Store and retrieve sensitive data.
 
 class StorageManager: NSObject, StorageManagerInterface {
