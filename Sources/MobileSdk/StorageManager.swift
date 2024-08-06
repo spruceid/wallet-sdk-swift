@@ -8,22 +8,31 @@
 //
 
 import Foundation
-import SpruceIDMobileSdkRs
+
+// import SpruceIDMobileSdkRs
 
 //    The following is a stripped-down version of the protocol definition from mobile-sdk-rs against which the storage
 // manager is intended to link.
 
 /*
- public typealias Key = String
- public typealias Value = Data
+public typealias Key = String
+public typealias Value = Data
 
- public protocol StorageManagerInterface : AnyObject {
-     func add(key: Key, value: Value) throws
-     func get(key: Key) throws  -> Value
-     func list()  -> [Key]
-     func remove(key: Key) throws
- }
- */
+public enum StorageManagerError: Error {
+    case InvalidLookupKey
+    case CouldNotDecryptValue
+    case StorageFull
+    case CouldNotMakeKey
+    case InternalError
+}
+
+public protocol StorageManagerInterface: AnyObject {
+    func add(key: Key, value: Value) throws
+    func get(key: Key) throws -> Value
+    func list() -> [Key]
+    func remove(key: Key) throws
+}
+*/
 
 //
 // Code
@@ -48,14 +57,32 @@ class StorageManager: NSObject, StorageManagerInterface {
             //    Get the applications support dir, and tack the name of the thing we're storing on the end of it.  This does
             // imply that `file` should be a valid filename.
 
-            let asdir = try FileManager.default.url(for: .applicationSupportDirectory,
-                                                    in: .userDomainMask,
-                                                    appropriateFor: nil, // Ignored
-                                                    create: true) // May not exist, make if necessary.
+            let fm = FileManager.default
+            let bundle = Bundle.main
 
-            return asdir.appendingPathComponent(file)
-        } catch { // Did the attempt to get the application support dir fail?
-            print("Failed to get/create the application support dir.")
+            let asdir = try fm.url(for: .applicationSupportDirectory,
+                                   in: .userDomainMask,
+                                   appropriateFor: nil, // Ignored
+                                   create: true) // May not exist, make if necessary.
+
+            //    If we create subdirectories in the application support directory, we need to put them in a subdir named
+            // after the app; normally, that's `CFBundleDisplayName` from `info.plist`, but that key doesn't have to be
+            // set, in which case we need to use `CFBundleName`.
+
+            guard let appname = bundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ??
+                bundle.object(forInfoDictionaryKey: "CFBundleName") as? String
+            else {
+                return nil
+            }
+
+            let datadir = asdir.appending(path: "\(appname)/sprucekit/datastore/", directoryHint: .isDirectory)
+
+            if !fm.fileExists(atPath: datadir.path) {
+                try fm.createDirectory(at: datadir, withIntermediateDirectories: true, attributes: nil)
+            }
+
+            return datadir.appendingPathComponent(file)
+        } catch {
             return nil
         }
     }
@@ -76,8 +103,7 @@ class StorageManager: NSObject, StorageManagerInterface {
         do {
             try value.write(to: file, options: .completeFileProtection)
         } catch {
-            print("Failed to write the data for '\(key)'.")
-            return
+            throw StorageManagerError.InternalError
         }
     }
 
@@ -97,10 +123,8 @@ class StorageManager: NSObject, StorageManagerInterface {
             let d = try Data(contentsOf: file)
             return d
         } catch {
-            print("Failed to read '\(file)'.")
+            throw StorageManagerError.InternalError
         }
-
-        return Data()
     }
 
     // Method: list()
@@ -143,45 +167,45 @@ class StorageManager: NSObject, StorageManagerInterface {
     //    Check to see if everything works.
 
     /*
-     func sys_test() {
-        let key   = "test_key"
+    func sys_test() {
+        let key = "test_key"
         let value = Data("Some random string of text. 😎".utf8)
 
         do {
-           try add(key: key, value: value)
+            try add(key: key, value: value)
         } catch {
-           print("\(self.classForCoder):\(#function): Failed add() value for key.")
-           return
+            print("\(classForCoder):\(#function): Failed add() value for key.")
+            return
         }
 
-        let keys = list();
+        let keys = list()
 
         print("Keys:")
         for k in keys {
-           print("  \(k)")
+            print("  \(k)")
         }
 
         do {
-           let payload = try get(key: key)
+            let payload = try get(key: key)
 
-           if !(payload == value) {
-              print("\(self.classForCoder):\(#function): Mismatch between stored & retrieved value.")
-              return
-           }
+            if !(payload == value) {
+                print("\(classForCoder):\(#function): Mismatch between stored & retrieved value.")
+                return
+            }
         } catch {
-           print("\(self.classForCoder):\(#function): Failed get() value for key.")
-           return
+            print("\(classForCoder):\(#function): Failed get() value for key.")
+            return
         }
 
         do {
-           try remove(key: key)
+            try remove(key: key)
         } catch {
-           print("\(self.classForCoder):\(#function): Failed remove() value for key.")
-           return
+            print("\(classForCoder):\(#function): Failed remove() value for key.")
+            return
         }
 
-        print("\(self.classForCoder):\(#function): Completed successfully.")
-     }
+        print("\(classForCoder):\(#function): Completed successfully.")
+        }
      */
 }
 
