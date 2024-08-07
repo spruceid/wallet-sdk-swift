@@ -11,24 +11,24 @@ import SpruceIDMobileSdkRs
 // manager is intended to link.
 
 /*
-public typealias Key = String
-public typealias Value = Data
+ public typealias Key = String
+ public typealias Value = Data
 
-public enum StorageManagerError: Error {
-    case InvalidLookupKey
-    case CouldNotDecryptValue
-    case StorageFull
-    case CouldNotMakeKey
-    case InternalError
-}
+ public enum StorageManagerError: Error {
+     case InvalidLookupKey
+     case CouldNotDecryptValue
+     case StorageFull
+     case CouldNotMakeKey
+     case InternalError
+ }
 
-public protocol StorageManagerInterface: AnyObject {
-    func add(key: Key, value: Value) throws
-    func get(key: Key) throws -> Value
-    func list() -> [Key]
-    func remove(key: Key) throws
-}
-*/
+ public protocol StorageManagerInterface: AnyObject {
+     func add(key: Key, value: Value) throws
+     func get(key: Key) throws -> Value?
+     func list() throws -> [Key]
+     func remove(key: Key) throws
+ }
+  */
 
 /// Store and retrieve sensitive data.
 class StorageManager: NSObject, StorageManagerInterface {
@@ -64,7 +64,13 @@ class StorageManager: NSObject, StorageManagerInterface {
                 return nil
             }
 
-            let datadir = asdir.appending(path: "\(appname)/sprucekit/datastore/", directoryHint: .isDirectory)
+            let datadir: URL
+
+            if #available(iOS 16.0, *) {
+                datadir = asdir.appending(path: "\(appname)/sprucekit/datastore/", directoryHint: .isDirectory)
+            } else {
+                datadir = asdir.appendingPathComponent("\(appname)/sprucekit/datastore/")
+            }
 
             if !fm.fileExists(atPath: datadir.path) {
                 try fm.createDirectory(at: datadir, withIntermediateDirectories: true, attributes: nil)
@@ -77,11 +83,11 @@ class StorageManager: NSObject, StorageManagerInterface {
     }
 
     /// Store a value for a specified key, encrypted in place.
-    /// 
+    ///
     /// - Parameters:
     ///     - key:   the name of the file
     ///     - value: the data to store
-    /// 
+    ///
     /// - Returns: a boolean indicating success
 
     func add(key: Key, value: Value) throws {
@@ -152,52 +158,52 @@ class StorageManager: NSObject, StorageManagerInterface {
     //    Check to see if everything works.
 
     /*
-    func sys_test() {
-        let key = "test_key"
-        let value = Data("Some random string of text. 😎".utf8)
+     func sys_test() {
+         let key = "test_key"
+         let value = Data("Some random string of text. 😎".utf8)
 
-        do {
-            try add(key: key, value: value)
-        } catch {
-            print("\(classForCoder):\(#function): Failed add() value for key.")
-            return
-        }
+         do {
+             try add(key: key, value: value)
+         } catch {
+             print("\(classForCoder):\(#function): Failed add() value for key.")
+             return
+         }
 
-        let keys: [String]
+         let keys: [String]
 
-        do {
-           keys = try list()
-        } catch {
-            print("\(classForCoder):\(#function): Failed list().")
-            return
-        }
+         do {
+            keys = try list()
+         } catch {
+             print("\(classForCoder):\(#function): Failed list().")
+             return
+         }
 
-        print("Keys:")
-        for k in keys {
-            print("  \(k)")
-        }
+         print("Keys:")
+         for k in keys {
+             print("  \(k)")
+         }
 
-        do {
-            let payload = try get(key: key)
+         do {
+             let payload = try get(key: key)
 
-            if !(payload == value) {
-                print("\(classForCoder):\(#function): Mismatch between stored & retrieved value.")
-                return
-            }
-        } catch {
-            print("\(classForCoder):\(#function): Failed get() value for key.")
-            return
-        }
+             if !(payload == value) {
+                 print("\(classForCoder):\(#function): Mismatch between stored & retrieved value.")
+                 return
+             }
+         } catch {
+             print("\(classForCoder):\(#function): Failed get() value for key.")
+             return
+         }
 
-        do {
-            try remove(key: key)
-        } catch {
-            print("\(classForCoder):\(#function): Failed remove() value for key.")
-            return
-        }
+         do {
+             try remove(key: key)
+         } catch {
+             print("\(classForCoder):\(#function): Failed remove() value for key.")
+             return
+         }
 
-        print("\(classForCoder):\(#function): Completed successfully.")
-    }
+         print("\(classForCoder):\(#function): Completed successfully.")
+     }
      */
 }
 
