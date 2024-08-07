@@ -85,7 +85,7 @@ class StorageManager: NSObject, StorageManagerInterface {
     /// - Returns: a boolean indicating success
 
     func add(key: Key, value: Value) throws {
-        guard let file = path(file: key) else { return }
+        guard let file = path(file: key) else { throw StorageManagerError.InternalError }
 
         do {
             try value.write(to: file, options: .completeFileProtection)
@@ -101,8 +101,8 @@ class StorageManager: NSObject, StorageManagerInterface {
     ///
     /// - Returns: optional data potentially containing the value associated with the key; may be `nil`
 
-    func get(key: Key) throws -> Value {
-        guard let file = path(file: key) else { return Data() }
+    func get(key: Key) throws -> Value? {
+        guard let file = path(file: key) else { throw StorageManagerError.InternalError }
 
         do {
             let d = try Data(contentsOf: file)
@@ -119,13 +119,13 @@ class StorageManager: NSObject, StorageManagerInterface {
     ///
     /// - Returns: a list of items in storage
 
-    func list() -> [Key] {
+    func list() throws -> [Key] {
         guard let asdir = path(file: "")?.path else { return [String]() }
 
         do {
             return try FileManager.default.contentsOfDirectory(atPath: asdir)
         } catch {
-            return [String]()
+            throw StorageManagerError.InternalError
         }
     }
 
@@ -163,7 +163,14 @@ class StorageManager: NSObject, StorageManagerInterface {
             return
         }
 
-        let keys = list()
+        let keys: [String]
+
+        do {
+           keys = try list()
+        } catch {
+            print("\(classForCoder):\(#function): Failed list().")
+            return
+        }
 
         print("Keys:")
         for k in keys {
@@ -190,7 +197,7 @@ class StorageManager: NSObject, StorageManagerInterface {
         }
 
         print("\(classForCoder):\(#function): Completed successfully.")
-        }
+    }
      */
 }
 

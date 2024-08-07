@@ -3,15 +3,16 @@ import XCTest
 
 final class StorageManager: XCTestCase {
     func storage_test() throws {
+        let sm = StorageManager()
         let key = "test_key"
         let value = Data("Some random string of text. 😎".utf8)
 
-        XTCAssertNoThrow(add(key: key, value: value), "\(classForCoder):\(#function): Failed add() value for key.")
+        XCTAssertNoThrow(try sm.add(key: key, value: value))
 
-        try XTCAssertNoThrow(let payload = get(key: key), "\(classForCoder):\(#function): Failed get() value for key.")
+        let payload = try sm.get(key: key)
 
-        XTCAssert(payload == value, "\(classForCoder):\(#function): Mismatch between stored & retrieved value.")
+        XCTAssert(payload == value, "\(classForCoder):\(#function): Mismatch between stored & retrieved value.")
 
-        try XTCAssertNoThrow(remove(key: key), "\(classForCoder):\(#function): Failed remove() value for key.")
+        XCTAssertNoThrow(try sm.remove(key: key))
     }
 }
